@@ -12,7 +12,8 @@ private var y = 0.0;
 
 @script AddComponentMenu("Camera-Control/Mouse Orbit")
 
-function Start () {
+function Start () 
+{
     var angles = transform.eulerAngles;
     x = angles.y;
     y = angles.x;
