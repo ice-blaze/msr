@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿// Manage the inputs from the user.
+
+using UnityEngine;
 using System.Collections;
 
 public class InputControllerScript : MonoBehaviour {

@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+﻿// Change color of the button, select/deselect and do the execute part
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(Renderer))]
 public class ButtonScript : MonoBehaviour {
 	
 	public GameObject selectors;

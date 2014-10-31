@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿// Center 3DText on the screen, independently the resolution.
+
+using UnityEngine;
 
 [RequireComponent(typeof(Renderer))]
 public class ScreenToWorldAlignment : MonoBehaviour 
 {
+    // TODO More button than just 3
 	public enum Index {First, Second, Third};
 	public Index index; 
 
@@ -11,17 +14,19 @@ public class ScreenToWorldAlignment : MonoBehaviour
 		Vector3 tempScreenPosition = new Vector3 (0, 0, -Camera.main.transform.position.z);
 		
 		Vector3 worldPosition = Camera.main.ScreenToWorldPoint(tempScreenPosition);
-		worldPosition.x -= renderer.bounds.size.x;// * tempScreenPosition.x / Screen.width;
-		worldPosition.y += renderer.bounds.size.y;// * (1 - tempScreenPosition.y / Screen.height);
+		worldPosition.x -= renderer.bounds.size.x;
+		worldPosition.y += renderer.bounds.size.y;
 		worldPosition.x *= 0.5f;
 		worldPosition.y *= 0.5f;
 
-		if (index == Index.First)
+        switch(index)
         {
-            worldPosition.y += renderer.bounds.size.y;
-        } else if (index == Index.Third)
-        {
-            worldPosition.y -= renderer.bounds.size.y;
+            case Index.First: worldPosition.y += renderer.bounds.size.y; 
+                break;
+            case Index.Third: worldPosition.y -= renderer.bounds.size.y;
+                break;
+            default: 
+                break;
         }
 
 		worldPosition.z += 5*renderer.bounds.size.y;
