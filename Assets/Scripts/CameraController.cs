@@ -10,14 +10,22 @@ public class CameraController : MonoBehaviour
 	public float heightDamping;
 	public float zoomRatio;
 	public float defaultFOV;
+	public float sensitivityX;
+	public float sensitivityY;
 	private Vector3 rotationVector;
+	private float cameraXAngleOffset;
+	private float cameraYAngleOffset;
+	public float cameraXMaxAngle;
+	public float cameraYMaxAngle;
    //	public GameObject player;
    	//Vector3 offset;
 	//Quaternion offsetangle;
    
    	// Use this for initialization
    	void Start()
-   	{
+	{
+		cameraXAngleOffset = 0;
+		cameraYAngleOffset = 0;
    	}
    
    	// Update is called once per frame
@@ -34,6 +42,18 @@ public class CameraController : MonoBehaviour
 		transform.position -= currentRotation*Vector3.forward*distance;
 		transform.position += Vector3.up * (myHeight-transform.position.y);
 		transform.LookAt(car);
+		cameraXAngleOffset += Input.GetAxis ("Mouse X") * sensitivityX;
+		cameraYAngleOffset += Input.GetAxis ("Mouse Y") * sensitivityY;
+		if (cameraXAngleOffset > cameraXMaxAngle) 
+			cameraXAngleOffset = cameraXMaxAngle;
+		if (cameraXAngleOffset < -cameraXMaxAngle) 
+			cameraXAngleOffset = -cameraXMaxAngle;
+		if (cameraYAngleOffset > cameraYMaxAngle) 
+			cameraYAngleOffset = cameraYMaxAngle;
+		if (cameraYAngleOffset < -cameraYMaxAngle) 
+			cameraYAngleOffset = -cameraYMaxAngle;
+		transform.localEulerAngles += cameraXAngleOffset * Vector3.up + cameraYAngleOffset * Vector3.left;
+
 
 
      // 	this.transform.position = this.player.transform.position + this.offset;

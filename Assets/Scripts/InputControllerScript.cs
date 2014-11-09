@@ -20,7 +20,7 @@ public class InputControllerScript : MonoBehaviour {
 			getSelected ().execute ();
 		} else if (Input.GetKeyDown (KeyCode.Escape)) {
 			Application.Quit();
-			UnityEditor.EditorApplication.isPlaying = false;
+		//	UnityEditor.EditorApplication.isPlaying = false;
 		}
 	}
 

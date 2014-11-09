@@ -20,7 +20,6 @@ public class ButtonScript : MonoBehaviour {
 		if (nextButton == null || prevButton == null) {
 			Debug.LogError("member nextButton or prevButton can't be null");
 		}
-		
 		if (isSelected == true && selected == null) {
 			selected = gameObject;
 			select ();
@@ -42,7 +41,7 @@ public class ButtonScript : MonoBehaviour {
 	public void execute(){
 		if (isExit) {
 			Application.Quit();
-			UnityEditor.EditorApplication.isPlaying = false;
+			//UnityEditor.EditorApplication.isPlaying = false;
 		}
 		Application.LoadLevel(levelIndex);
 	}

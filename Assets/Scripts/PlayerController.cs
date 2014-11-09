@@ -11,7 +11,11 @@ public class PlayerController : MonoBehaviour
 	public Transform WheelLBTransform;
 	public Transform WheelRFTransform;
 	public Transform WheelRBTransform;
-	int maxTorque = 300;
+	private float currentSpeed;
+	public float horsePower = 120;
+	public float brakeFriction = 10;
+	public float frictionCoeff = 0;
+	private int horseToWatt = 1356;
    /*void Update()
    {
    }*/
@@ -20,12 +24,19 @@ public class PlayerController : MonoBehaviour
    {
 
 		rigidbody.centerOfMass = Vector3.down * 1f;
+		currentSpeed = 0.0f;
    }
 
    void FixedUpdate()
    {
-		WheelLF.motorTorque = maxTorque * Input.GetAxis("Vertical");
-		WheelRF.motorTorque = maxTorque * Input.GetAxis("Vertical");
+		currentSpeed = Mathf.Max(2*Mathf.PI*WheelLF.radius*Mathf.Abs(WheelLF.rpm*60/1000), 1f);
+		WheelLF.motorTorque = horseToWatt * horsePower / currentSpeed * Input.GetAxis ("Vertical");
+		WheelRF.motorTorque = horseToWatt * horsePower / currentSpeed * Input.GetAxis ("Vertical");
+
+		WheelLF.brakeTorque = currentSpeed * brakeFriction + frictionCoeff;
+		WheelRF.brakeTorque = currentSpeed * brakeFriction + frictionCoeff;
+
+
 		WheelLF.steerAngle = 20 * Input.GetAxis("Horizontal");
 		WheelRF.steerAngle = 20 * Input.GetAxis("Horizontal");
 
