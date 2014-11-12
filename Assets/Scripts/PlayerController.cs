@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
 	public float horsePower = 120;
 	public float brakeFriction = 10;
 	public float frictionCoeff = 0;
+	public float lowSpeedSteerAngle;
+	public float highSpeedSteerAngle;
+	private float currentSteerAngle;
 	private int horseToWatt = 1356;
    /*void Update()
    {
@@ -36,14 +39,12 @@ public class PlayerController : MonoBehaviour
 		WheelLF.brakeTorque = currentSpeed * brakeFriction + frictionCoeff;
 		WheelRF.brakeTorque = currentSpeed * brakeFriction + frictionCoeff;
 
+		float speedFactor = rigidbody.velocity.magnitude / 50;
+		float currentSteerAngle = Mathf.Lerp(lowSpeedSteerAngle, highSpeedSteerAngle, speedFactor);
+		currentSteerAngle *= Input.GetAxis("Horizontal");
+		WheelLF.steerAngle = currentSteerAngle;
+		WheelRF.steerAngle = currentSteerAngle;
 
-		WheelLF.steerAngle = 20 * Input.GetAxis("Horizontal");
-		WheelRF.steerAngle = 20 * Input.GetAxis("Horizontal");
-
-	
-       
-//      var movement = new Vector3(moveVertical, 0, -moveHorizontal);
-//      this.rigidbody.AddForce(movement * this.speed * Time.deltaTime);
    }
 	void Update()
 	{
@@ -52,8 +53,12 @@ public class PlayerController : MonoBehaviour
 		WheelLBTransform.Rotate (0,WheelLB.rpm / 60 * -360 * Time.deltaTime,0);
 		WheelRBTransform.Rotate (0,WheelLB.rpm / 60 * -360 * Time.deltaTime,0);
 
-		WheelLFTransform.localEulerAngles += Vector3.up * (WheelLF.steerAngle - WheelLFTransform.localEulerAngles.z - 180 - WheelLFTransform.localEulerAngles.y);
-		WheelRFTransform.localEulerAngles += Vector3.up * (WheelRF.steerAngle - WheelRFTransform.localEulerAngles.z - 180 - WheelRFTransform.localEulerAngles.y);
+		
+		float newYAngle = Mathf.Lerp(WheelLFTransform.localEulerAngles.y, WheelLF.steerAngle - WheelLFTransform.localEulerAngles.z + 180, 1);
+
+		WheelLFTransform.localEulerAngles = new Vector3(WheelLFTransform.localEulerAngles.x, newYAngle, WheelLFTransform.localEulerAngles.z);
+
+		WheelRFTransform.localEulerAngles = new Vector3(WheelRFTransform.localEulerAngles.x, newYAngle, WheelRFTransform.localEulerAngles.z);
 
 	}
 }
