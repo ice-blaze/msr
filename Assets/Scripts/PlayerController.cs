@@ -19,6 +19,11 @@ public class PlayerController : MonoBehaviour
 	public float highSpeedSteerAngle;
 	private float currentSteerAngle;
 	private int horseToWatt = 1356;
+
+	public ParticleRenderer prLF;
+	public ParticleRenderer prLB;
+	public ParticleRenderer prRF;
+	public ParticleRenderer prRB;
 	/*void Update()
    {
    }*/
@@ -59,7 +64,87 @@ public class PlayerController : MonoBehaviour
 		WheelLFTransform.localEulerAngles = new Vector3(WheelLFTransform.localEulerAngles.x, newYAngle, WheelLFTransform.localEulerAngles.z);
 		
 		WheelRFTransform.localEulerAngles = new Vector3(WheelRFTransform.localEulerAngles.x, newYAngle, WheelRFTransform.localEulerAngles.z);
+
+		WheelPosition ();
+	}
+
+	void WheelPosition()
+	{
+		RaycastHit hit;
+		Vector3 wheelPos = new Vector3();
 		
+		//FL
+
+		if (Physics.Raycast(WheelLF.transform.position, -WheelLF.transform.up, out hit, WheelLF.radius+WheelLF.suspensionDistance) ){
+			wheelPos = hit.point+WheelLF.transform.up * WheelLF.radius;
+			prLF.maxParticleSize = 0.7f;
+		}
+		else {
+			wheelPos = WheelLF.transform.position -WheelLF.transform.up* WheelLF.suspensionDistance;
+			prLF.maxParticleSize = 0;
+		}
+		WheelLFTransform.position = wheelPos;
+
+		if (Physics.Raycast(WheelRF.transform.position, -WheelRF.transform.up, out hit, WheelRF.radius+WheelRF.suspensionDistance) ){
+			wheelPos = hit.point+WheelRF.transform.up * WheelRF.radius;
+			prRF.maxParticleSize = 0.7f;
+		}
+		else {
+			wheelPos = WheelRF.transform.position -WheelRF.transform.up* WheelRF.suspensionDistance;
+			prRF.maxParticleSize = 0;
+		}
+		WheelRFTransform.position = wheelPos;
+
+		if (Physics.Raycast(WheelLB.transform.position, -WheelLB.transform.up, out hit, WheelLB.radius+WheelLB.suspensionDistance) ){
+			wheelPos = hit.point+WheelLB.transform.up * WheelLB.radius;
+			prLB.maxParticleSize = 0.7f;
+		}
+		else {
+			wheelPos = WheelLB.transform.position -WheelLB.transform.up* WheelLB.suspensionDistance;
+			prLB.maxParticleSize = 0;
+		}
+		WheelLBTransform.position = wheelPos;
+
+		if (Physics.Raycast(WheelRB.transform.position, -WheelRB.transform.up, out hit, WheelRB.radius+WheelRB.suspensionDistance) ){
+			wheelPos = hit.point+WheelRB.transform.up * WheelRB.radius;
+			prRB.maxParticleSize = 0.7f;
+		}
+		else {
+			wheelPos = WheelRB.transform.position -WheelRB.transform.up* WheelRB.suspensionDistance;
+			prRB.maxParticleSize = 0;
+		}
+		WheelRBTransform.position = wheelPos;
+		/*
+		//FR
+		
+		if (Physics.Raycast(wheelFR.transform.position, -wheelFR.transform.up,hit,wheelFR.radius+wheelFR.suspensionDistance) ){
+			wheelPos = hit.point+wheelFR.transform.up * wheelFR.radius;
+		}
+		else {
+			wheelPos = wheelFR.transform.position -wheelFR.transform.up* wheelFR.suspensionDistance;
+		}
+		wheelFRTrans.position = wheelPos;
+		
+		//RL
+		
+		if (Physics.Raycast(wheelRL.transform.position, -wheelRL.transform.up,hit,wheelRL.radius+wheelRL.suspensionDistance) ){
+			wheelPos = hit.point+wheelRL.transform.up * wheelRL.radius;
+		}
+		else {
+			wheelPos = wheelRL.transform.position -wheelRL.transform.up* wheelRL.suspensionDistance;
+		}
+		wheelRLTrans.position = wheelPos;
+		
+		//RR
+		
+		if (Physics.Raycast(wheelRR.transform.position, -wheelRR.transform.up,hit,wheelRR.radius+wheelRR.suspensionDistance) ){
+			wheelPos = hit.point+wheelRR.transform.up * wheelRR.radius;
+		}
+		else {
+			wheelPos = wheelRR.transform.position -wheelRR.transform.up* wheelRR.suspensionDistance;
+		}
+		wheelRRTrans.position = wheelPos;
+		*/
 	}
 }
 
