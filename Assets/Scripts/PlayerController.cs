@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
 	public ParticleRenderer prLB;
 	public ParticleRenderer prRF;
 	public ParticleRenderer prRB;
+
+	public float particleSize;
 	/*void Update()
    {
    }*/
@@ -31,15 +33,15 @@ public class PlayerController : MonoBehaviour
 	void Start()
 	{
 		
-		rigidbody.centerOfMass = Vector3.down * 2f;
+		rigidbody.centerOfMass = Vector3.down * 1f;
 		currentSpeed = 0.0f;
 	}
 	
 	void FixedUpdate()
 	{
-		currentSpeed = Mathf.Max(2*Mathf.PI*WheelLF.radius*Mathf.Abs(WheelLF.rpm*60/1000), 10f);
-		WheelLF.motorTorque = horseToWatt * horsePower / currentSpeed * Input.GetAxis ("Vertical");
-		WheelRF.motorTorque = horseToWatt * horsePower / currentSpeed * Input.GetAxis ("Vertical");
+		currentSpeed = 2*Mathf.PI*WheelLF.radius*Mathf.Abs(WheelLF.rpm*60/1000);
+		WheelLF.motorTorque = horseToWatt * horsePower / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
+		WheelRF.motorTorque = horseToWatt * horsePower / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
 		
 		WheelLF.brakeTorque = currentSpeed * brakeFriction + frictionCoeff;
 		WheelRF.brakeTorque = currentSpeed * brakeFriction + frictionCoeff;
@@ -77,7 +79,7 @@ public class PlayerController : MonoBehaviour
 
 		if (Physics.Raycast(WheelLF.transform.position, -WheelLF.transform.up, out hit, WheelLF.radius+WheelLF.suspensionDistance) ){
 			wheelPos = hit.point+WheelLF.transform.up * WheelLF.radius;
-			prLF.maxParticleSize = 0.7f;
+			prLF.maxParticleSize = particleSize*currentSpeed/100;
 		}
 		else {
 			wheelPos = WheelLF.transform.position -WheelLF.transform.up* WheelLF.suspensionDistance;
@@ -87,7 +89,7 @@ public class PlayerController : MonoBehaviour
 
 		if (Physics.Raycast(WheelRF.transform.position, -WheelRF.transform.up, out hit, WheelRF.radius+WheelRF.suspensionDistance) ){
 			wheelPos = hit.point+WheelRF.transform.up * WheelRF.radius;
-			prRF.maxParticleSize = 0.7f;
+			prRF.maxParticleSize = particleSize*currentSpeed/100;
 		}
 		else {
 			wheelPos = WheelRF.transform.position -WheelRF.transform.up* WheelRF.suspensionDistance;
@@ -97,7 +99,7 @@ public class PlayerController : MonoBehaviour
 
 		if (Physics.Raycast(WheelLB.transform.position, -WheelLB.transform.up, out hit, WheelLB.radius+WheelLB.suspensionDistance) ){
 			wheelPos = hit.point+WheelLB.transform.up * WheelLB.radius;
-			prLB.maxParticleSize = 0.7f;
+			prLB.maxParticleSize = particleSize*currentSpeed/100;
 		}
 		else {
 			wheelPos = WheelLB.transform.position -WheelLB.transform.up* WheelLB.suspensionDistance;
@@ -107,7 +109,7 @@ public class PlayerController : MonoBehaviour
 
 		if (Physics.Raycast(WheelRB.transform.position, -WheelRB.transform.up, out hit, WheelRB.radius+WheelRB.suspensionDistance) ){
 			wheelPos = hit.point+WheelRB.transform.up * WheelRB.radius;
-			prRB.maxParticleSize = 0.7f;
+			prRB.maxParticleSize = particleSize*currentSpeed/100;
 		}
 		else {
 			wheelPos = WheelRB.transform.position -WheelRB.transform.up* WheelRB.suspensionDistance;
