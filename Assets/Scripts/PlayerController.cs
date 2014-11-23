@@ -26,6 +26,8 @@ public class PlayerController : MonoBehaviour
 	public ParticleRenderer prRB;
 
 	public float particleSize;
+
+	public Material skidMaterial;
 	/*void Update()
    {
    }*/
@@ -124,37 +126,10 @@ public class PlayerController : MonoBehaviour
 			prRB.maxParticleSize = 0;
 		}
 		WheelRBTransform.position = wheelPos;
-		/*
-		//FR
-		
-		if (Physics.Raycast(wheelFR.transform.position, -wheelFR.transform.up,hit,wheelFR.radius+wheelFR.suspensionDistance) ){
-			wheelPos = hit.point+wheelFR.transform.up * wheelFR.radius;
-		}
-		else {
-			wheelPos = wheelFR.transform.position -wheelFR.transform.up* wheelFR.suspensionDistance;
-		}
-		wheelFRTrans.position = wheelPos;
-		
-		//RL
-		
-		if (Physics.Raycast(wheelRL.transform.position, -wheelRL.transform.up,hit,wheelRL.radius+wheelRL.suspensionDistance) ){
-			wheelPos = hit.point+wheelRL.transform.up * wheelRL.radius;
-		}
-		else {
-			wheelPos = wheelRL.transform.position -wheelRL.transform.up* wheelRL.suspensionDistance;
-		}
-		wheelRLTrans.position = wheelPos;
-		
-		//RR
-		
-		if (Physics.Raycast(wheelRR.transform.position, -wheelRR.transform.up,hit,wheelRR.radius+wheelRR.suspensionDistance) ){
-			wheelPos = hit.point+wheelRR.transform.up * wheelRR.radius;
-		}
-		else {
-			wheelPos = wheelRR.transform.position -wheelRR.transform.up* wheelRR.suspensionDistance;
-		}
-		wheelRRTrans.position = wheelPos;
-		*/
+	
 	}
+
+
+
 }
 
