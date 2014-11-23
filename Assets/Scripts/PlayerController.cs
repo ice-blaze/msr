@@ -35,7 +35,15 @@ public class PlayerController : MonoBehaviour
 		
 		rigidbody.centerOfMass = Vector3.down * 1f;
 		currentSpeed = 0.0f;
-	}
+   }
+   
+   void OnTriggerEnter(Collider other)
+   {
+      if (other.gameObject.tag == "Finish")
+      {
+         Application.LoadLevel("menu");
+      }
+   }
 	
 	void FixedUpdate()
 	{

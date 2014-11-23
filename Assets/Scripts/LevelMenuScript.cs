@@ -15,7 +15,7 @@ public class LevelMenuScript : MonoBehaviour {
 	TextMesh levelName;
 	TextMesh highscore;
 	
-	void Start(){
+	void Start() {
 		inputController = GameObject.Find("InputController").GetComponent<InputControllerScript>();
 		anima = GetComponentInParent<Animator>();
 
