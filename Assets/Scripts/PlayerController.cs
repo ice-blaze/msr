@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
 	public Transform WheelLBTransform;
 	public Transform WheelRFTransform;
 	public Transform WheelRBTransform;
-	private float currentSpeed;
+	public float currentSpeed;
 	public float horsePower = 120;
 	public float brakeFriction = 10;
 	public float frictionCoeff = 0;
