@@ -89,41 +89,45 @@ public class PlayerController : MonoBehaviour
 
 		if (Physics.Raycast(WheelLF.transform.position, -WheelLF.transform.up, out hit, WheelLF.radius+WheelLF.suspensionDistance) ){
 			wheelPos = hit.point+WheelLF.transform.up * WheelLF.radius;
-			prLF.maxParticleSize = particleSize*currentSpeed/100;
+			prLF.maxParticleSize = particleSize*currentSpeed/100*particleSize;
+			prLF.particleEmitter.emit = true;
 		}
 		else {
 			wheelPos = WheelLF.transform.position -WheelLF.transform.up* WheelLF.suspensionDistance;
-			prLF.maxParticleSize = 0;
+			prLF.particleEmitter.emit = false;
 		}
 		WheelLFTransform.position = wheelPos;
 
 		if (Physics.Raycast(WheelRF.transform.position, -WheelRF.transform.up, out hit, WheelRF.radius+WheelRF.suspensionDistance) ){
 			wheelPos = hit.point+WheelRF.transform.up * WheelRF.radius;
-			prRF.maxParticleSize = particleSize*currentSpeed/100;
+			prRF.maxParticleSize = particleSize*currentSpeed/100*particleSize;
+			prRF.particleEmitter.emit = true;
 		}
 		else {
 			wheelPos = WheelRF.transform.position -WheelRF.transform.up* WheelRF.suspensionDistance;
-			prRF.maxParticleSize = 0;
+			prRF.particleEmitter.emit = false;
 		}
 		WheelRFTransform.position = wheelPos;
 
 		if (Physics.Raycast(WheelLB.transform.position, -WheelLB.transform.up, out hit, WheelLB.radius+WheelLB.suspensionDistance) ){
 			wheelPos = hit.point+WheelLB.transform.up * WheelLB.radius;
-			prLB.maxParticleSize = particleSize*currentSpeed/100;
+			prLB.maxParticleSize = particleSize*currentSpeed/100*particleSize;
+			prLB.particleEmitter.emit = true;
 		}
 		else {
 			wheelPos = WheelLB.transform.position -WheelLB.transform.up* WheelLB.suspensionDistance;
-			prLB.maxParticleSize = 0;
+			prLB.particleEmitter.emit = false;
 		}
 		WheelLBTransform.position = wheelPos;
 
 		if (Physics.Raycast(WheelRB.transform.position, -WheelRB.transform.up, out hit, WheelRB.radius+WheelRB.suspensionDistance) ){
 			wheelPos = hit.point+WheelRB.transform.up * WheelRB.radius;
-			prRB.maxParticleSize = particleSize*currentSpeed/100;
+			prRB.maxParticleSize = particleSize*currentSpeed/100*particleSize;
+			prRB.particleEmitter.emit = true;
 		}
 		else {
 			wheelPos = WheelRB.transform.position -WheelRB.transform.up* WheelRB.suspensionDistance;
-			prRB.maxParticleSize = 0;
+			prRB.particleEmitter.emit = false;
 		}
 		WheelRBTransform.position = wheelPos;
 	
