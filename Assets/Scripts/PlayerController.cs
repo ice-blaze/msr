@@ -13,12 +13,14 @@ public class PlayerController : MonoBehaviour
 	public Transform WheelRBTransform;
 	public float currentSpeed;
 	public float horsePower = 120;
+	private float HorsePowerApplied;
 	public float brakeFriction = 10;
 	public float frictionCoeff = 0;
 	public float lowSpeedSteerAngle;
 	public float highSpeedSteerAngle;
-	private float currentSteerAngle;
 	private int horseToWatt = 1356;
+	float dv = 1f;
+	float dh = 1f;
 
 	public ParticleRenderer prLF;
 	public ParticleRenderer prLB;
@@ -34,10 +36,21 @@ public class PlayerController : MonoBehaviour
 	
 	void Start()
 	{
-		
+		HorsePowerApplied = horsePower;
 		rigidbody.centerOfMass = Vector3.down * 1f;
 		currentSpeed = 0.0f;
+
+		dv = Mathf.Abs(WheelLF.transform.position.x - WheelRB.transform.position.x);
+		dh = Mathf.Abs(WheelLF.transform.position.z - WheelRB.transform.position.z);
+		if (dv == 0)
+						dv = 6;
+		if (dh == 0)
+						dh = 3;
+
+
    }
+
+
    
    void OnTriggerEnter(Collider other)
    {
@@ -50,18 +63,40 @@ public class PlayerController : MonoBehaviour
 	void FixedUpdate()
 	{
 		currentSpeed = 2*Mathf.PI*WheelLF.radius*Mathf.Abs(WheelLF.rpm*60/1000);
-		WheelLF.motorTorque = horseToWatt * horsePower / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
-		WheelRF.motorTorque = horseToWatt * horsePower / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
+		WheelLF.motorTorque = horseToWatt * HorsePowerApplied / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
+		WheelRF.motorTorque = horseToWatt * HorsePowerApplied / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
+		if (Input.GetKey ("space") == true) {
+			HorsePowerApplied = horsePower * 4;
+		}
+		else 
+		{
+			HorsePowerApplied = horsePower;		
+		}
 		
 		WheelLF.brakeTorque = currentSpeed * brakeFriction + frictionCoeff;
 		WheelRF.brakeTorque = currentSpeed * brakeFriction + frictionCoeff;
 		
 		float speedFactor = Mathf.Min(rigidbody.velocity.magnitude / 50);
 		float currentSteerAngle = Mathf.Lerp(lowSpeedSteerAngle, highSpeedSteerAngle, speedFactor);
+
+
+		//Steer angle of interior wheel
 		currentSteerAngle *= Input.GetAxis("Horizontal");
-		WheelLF.steerAngle = currentSteerAngle;
-		WheelRF.steerAngle = currentSteerAngle;
-		
+		if (currentSteerAngle > 0) 
+		{
+			WheelRF.steerAngle = currentSteerAngle;
+			WheelLF.steerAngle = getExternalWheelAngle(currentSteerAngle, dv, dh);
+		} 
+		else if(currentSteerAngle < 0)
+		{
+			WheelLF.steerAngle = currentSteerAngle;
+			WheelRF.steerAngle = getExternalWheelAngle(currentSteerAngle, dv, dh);
+		}
+		else
+		{
+			WheelLF.steerAngle = currentSteerAngle;
+			WheelRF.steerAngle = currentSteerAngle;
+		}
 	}
 	void Update()
 	{
@@ -70,12 +105,13 @@ public class PlayerController : MonoBehaviour
 		WheelLBTransform.Rotate (0,0,WheelLB.rpm / 60 * -360 * Time.deltaTime);
 		WheelRBTransform.Rotate (0,0,WheelRB.rpm / 60 * -360 * Time.deltaTime);
 		
-		
-		float newYAngle = WheelLF.steerAngle/* - WheelLFTransform.localEulerAngles.z */;
-		
-		WheelLFTransform.localEulerAngles = new Vector3(WheelLFTransform.localEulerAngles.x, newYAngle, WheelLFTransform.localEulerAngles.z);
-		
-		WheelRFTransform.localEulerAngles = new Vector3(WheelRFTransform.localEulerAngles.x, newYAngle, WheelRFTransform.localEulerAngles.z);
+
+
+		float newLFYAngle = WheelLF.steerAngle;
+		float newRFYAngle = WheelRF.steerAngle;
+
+		WheelLFTransform.localEulerAngles = new Vector3(WheelLFTransform.localEulerAngles.x, newLFYAngle, WheelLFTransform.localEulerAngles.z);
+		WheelRFTransform.localEulerAngles = new Vector3(WheelRFTransform.localEulerAngles.x, newRFYAngle, WheelRFTransform.localEulerAngles.z);
 
 		WheelPosition ();
 	}
@@ -133,7 +169,11 @@ public class PlayerController : MonoBehaviour
 	
 	}
 
-
+	//Calculate the external wheel angle corresponding to the internal in order to get a perfect direction for a vehicle
+	float getExternalWheelAngle(float internalAngle, float verticalWheelBase, float horizontalWheelBase)
+	{
+		return Mathf.Rad2Deg*Mathf.Atan(verticalWheelBase/((verticalWheelBase/Mathf.Tan(Mathf.Deg2Rad*internalAngle))+horizontalWheelBase));
+	}
 
 }
 
