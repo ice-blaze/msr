@@ -8,11 +8,13 @@ public class StartMenuScript : MonoBehaviour {
 		inputController = GameObject.Find("InputController").GetComponent<InputControllerScript>();
 	}
 
-	void animationFinished(){
+	void animationFinished()
+   {
 		inputController.isAnimated = false;
 	}
 
-	void endStartMenu(){
-		inputController.quitedStartMenu();
+	void endStartMenu()
+   {
+		inputController.QuittedStartMenu();
 	}
 }

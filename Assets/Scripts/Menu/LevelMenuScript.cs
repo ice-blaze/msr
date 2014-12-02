@@ -2,7 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class LevelMenuScript : MonoBehaviour {
+/**
+ * Manage the input into the main menu.
+ */
+public class LevelMenuScript : MonoBehaviour
+{
 	InputControllerScript inputController;
 	Animator anima;
 	
@@ -15,7 +19,8 @@ public class LevelMenuScript : MonoBehaviour {
 	TextMesh levelName;
 	TextMesh highscore;
 	
-	void Start() {
+	void Start()
+   {
 		inputController = GameObject.Find("InputController").GetComponent<InputControllerScript>();
 		anima = GetComponentInParent<Animator>();
 
@@ -28,20 +33,22 @@ public class LevelMenuScript : MonoBehaviour {
 		levels.Add("BIG JUMP");
 		images.Add( Resources.Load("Levels/levelimage", typeof(Texture2D)) as Texture2D);
 
-		refreshText();
+		RefreshText();
 	}
 
-	public void nextButton(){
+	public void NextButton(){
 		anima.SetTrigger("levelout");
 		actualLevel = (actualLevel+1)%numberLevel;
 	}
 
-	public void quit(){
+	public void Quit()
+   {
 		anima.SetBool("quit",true);
 		anima.SetTrigger("levelout");
 	}
 
-	public void previousButton(){
+	public void previousButton()
+   {
 		//set all speed -1
 //		Debug.Log(animationClips.Length);
 //		anima.get
@@ -49,37 +56,43 @@ public class LevelMenuScript : MonoBehaviour {
 		actualLevel = (actualLevel-1)%numberLevel;
 	}
 
-	public void endLevelOut(){
+	public void endLevelOut()
+   {
 		Debug.Log("asidasd");
 		if(anima.GetBool("quit")){
 			anima.SetBool("quit",false);
-			inputController.quitedLevelMenu();
+			inputController.QuittedLevelMenu();
 		}
 		//change name of froms
 //		Debug.Log(highscore);
-		refreshText();
+		RefreshText();
 	}
 
-	public void renderChild(int boolean){
-		renderChild(gameObject,(boolean==0)?true:false);
+	public void RenderChild(int boolean)
+   {
+		RenderChild(gameObject,(boolean==0)?true:false);
 	}
 
-	public void refreshText(){
+	public void RefreshText()
+   {
 		levelName.text = levels[actualLevel];
 
 		image.renderer.material.mainTexture = images[actualLevel];
 		highscore.text = "99:99.999";
 	}
 
-	void animationFinished(){
+	void AnimationFinished()
+   {
 		inputController.isAnimated = false;
 	}
 
-	public void execute(){
+	public void Execute()
+   {
 		Application.LoadLevel(actualLevel+1);
 	}
 
-	public static void renderChild(GameObject parent,bool isEnabled){
+	public static void RenderChild(GameObject parent,bool isEnabled)
+   {
 		foreach(Renderer child in parent.GetComponentsInChildren<Renderer>()){
 			child.renderer.enabled=isEnabled;
 		}
