@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PolicySet name="MSR">
-  <TextStylePolicy inheritsSet="Mono" inheritsScope="text/plain" scope="text/plain" />
+  <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/plain">
+    <EolMarker>Unix</EolMarker>
+  </TextStylePolicy>
   <XmlFormattingPolicy inheritsSet="Mono" inheritsScope="application/xml" scope="application/xml" />
-  <CSharpFormattingPolicy inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp" />
+  <CSharpFormattingPolicy inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp">
+    <ElseNewLinePlacement>NewLine</ElseNewLinePlacement>
+    <CatchNewLinePlacement>NewLine</CatchNewLinePlacement>
+    <FinallyNewLinePlacement>NewLine</FinallyNewLinePlacement>
+    <WhileNewLinePlacement>NewLine</WhileNewLinePlacement>
+    <BeforeMethodCallParentheses>False</BeforeMethodCallParentheses>
+    <BeforeConstructorDeclarationParentheses>False</BeforeConstructorDeclarationParentheses>
+    <BeforeIndexerDeclarationBracket>False</BeforeIndexerDeclarationBracket>
+    <BeforeDelegateDeclarationParentheses>False</BeforeDelegateDeclarationParentheses>
+    <NewParentheses>False</NewParentheses>
+    <SpacesBeforeBrackets>False</SpacesBeforeBrackets>
+  </CSharpFormattingPolicy>
   <NameConventionPolicy>
     <Rules>
       <NamingRule>
@@ -184,4 +197,6 @@
   </NameConventionPolicy>
   <VersionControlPolicy inheritsSet="Mono" />
   <ChangeLogPolicy inheritsSet="Mono" />
+  <TextStylePolicy inheritsSet="Mono" inheritsScope="text/plain" scope="application/xml" />
+  <TextStylePolicy inheritsSet="null" scope="text/x-csharp" />
 </PolicySet>
