@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
 	public Transform WheelLBTransform;
 	public Transform WheelRFTransform;
 	public Transform WheelRBTransform;
+	public Transform AxleBack;
+	public Transform AxleFront;
 	public float currentSpeed;
 	public float horsePower = 120;
 	private float HorsePowerApplied;
@@ -19,6 +21,18 @@ public class PlayerController : MonoBehaviour
 	public float lowSpeedSteerAngle;
 	public float highSpeedSteerAngle;
 	private int horseToWatt = 1356;
+	private float ElevationLF = 0;
+	private float ElevationLB = 0;
+	private float ElevationRF = 0;
+	private float ElevationRB = 0;
+	private Vector3 offsetAxleB;
+	private Vector3 offsetAxleF;
+	public float BackAltitudeDifference;
+	public float BackLatitudeDifference;
+	public float FrontAltitudeDifference;
+	public float FrontLatitudeDifference;
+	public float BackAngle;
+	public float FrontAngle;
 	float dv = 1f;
 	float dh = 1f;
 
@@ -40,13 +54,13 @@ public class PlayerController : MonoBehaviour
 		rigidbody.centerOfMass = Vector3.down * 1f;
 		currentSpeed = 0.0f;
 
+		//Compute the vertical and horizontal distance between the wheels in order to make some trigonometry for 
+		//wheels steer angles
 		dv = Mathf.Abs(WheelLF.transform.position.x - WheelRB.transform.position.x);
-		dh = Mathf.Abs(WheelLF.transform.position.z - WheelRB.transform.position.z);
-		if (dv == 0)
-						dv = 6;
-		if (dh == 0)
-						dh = 3;
-
+		dh = Mathf.Abs (WheelLF.transform.position.z - WheelRB.transform.position.z);
+		//Save the base position of both axle in order to modifiy it according to the suspension
+		offsetAxleB = AxleBack.localPosition;
+		offsetAxleF = AxleFront.localPosition;
 
    }
 
@@ -114,6 +128,7 @@ public class PlayerController : MonoBehaviour
 		WheelRFTransform.localEulerAngles = new Vector3(WheelRFTransform.localEulerAngles.x, newRFYAngle, WheelRFTransform.localEulerAngles.z);
 
 		WheelPosition ();
+		AxlePosition ();
 	}
 
 	void WheelPosition()
@@ -125,48 +140,74 @@ public class PlayerController : MonoBehaviour
 
 		if (Physics.Raycast(WheelLF.transform.position, -WheelLF.transform.up, out hit, WheelLF.radius+WheelLF.suspensionDistance) ){
 			wheelPos = hit.point+WheelLF.transform.up * WheelLF.radius;
+			ElevationLF = hit.distance;
 			prLF.maxParticleSize = particleSize*currentSpeed/100*particleSize;
 			prLF.particleEmitter.emit = true;
 		}
 		else {
 			wheelPos = WheelLF.transform.position -WheelLF.transform.up* WheelLF.suspensionDistance;
+			ElevationLF = WheelLF.suspensionDistance+WheelLF.radius;
 			prLF.particleEmitter.emit = false;
 		}
 		WheelLFTransform.position = wheelPos;
 
 		if (Physics.Raycast(WheelRF.transform.position, -WheelRF.transform.up, out hit, WheelRF.radius+WheelRF.suspensionDistance) ){
 			wheelPos = hit.point+WheelRF.transform.up * WheelRF.radius;
+			ElevationRF = hit.distance;
 			prRF.maxParticleSize = particleSize*currentSpeed/100*particleSize;
 			prRF.particleEmitter.emit = true;
 		}
 		else {
 			wheelPos = WheelRF.transform.position -WheelRF.transform.up* WheelRF.suspensionDistance;
+			ElevationRF = WheelRF.suspensionDistance+WheelRF.radius;
 			prRF.particleEmitter.emit = false;
 		}
 		WheelRFTransform.position = wheelPos;
 
 		if (Physics.Raycast(WheelLB.transform.position, -WheelLB.transform.up, out hit, WheelLB.radius+WheelLB.suspensionDistance) ){
 			wheelPos = hit.point+WheelLB.transform.up * WheelLB.radius;
+			ElevationLB = hit.distance;
 			prLB.maxParticleSize = particleSize*currentSpeed/100*particleSize;
 			prLB.particleEmitter.emit = true;
 		}
 		else {
 			wheelPos = WheelLB.transform.position -WheelLB.transform.up* WheelLB.suspensionDistance;
+			ElevationLB = WheelLB.suspensionDistance+WheelLB.radius;
 			prLB.particleEmitter.emit = false;
 		}
 		WheelLBTransform.position = wheelPos;
 
 		if (Physics.Raycast(WheelRB.transform.position, -WheelRB.transform.up, out hit, WheelRB.radius+WheelRB.suspensionDistance) ){
 			wheelPos = hit.point+WheelRB.transform.up * WheelRB.radius;
+			ElevationRB = hit.distance;
 			prRB.maxParticleSize = particleSize*currentSpeed/100*particleSize;
 			prRB.particleEmitter.emit = true;
 		}
 		else {
 			wheelPos = WheelRB.transform.position -WheelRB.transform.up* WheelRB.suspensionDistance;
+			ElevationRB = WheelRB.suspensionDistance+WheelRB.radius;
 			prRB.particleEmitter.emit = false;
 		}
 		WheelRBTransform.position = wheelPos;
 	
+	}
+	//Put the axle with the correct angle, following the wheels
+	void AxlePosition()
+	{
+		//Back axle
+		BackAltitudeDifference = ElevationLB-ElevationRB;
+		BackLatitudeDifference = Mathf.Abs(WheelRBTransform.transform.localPosition.z-WheelLBTransform.transform.localPosition.z);
+		BackAngle = Mathf.Atan (BackAltitudeDifference / BackLatitudeDifference) * Mathf.Rad2Deg;
+		AxleBack.localEulerAngles = new Vector3(0,0,BackAngle);
+		AxleBack.localPosition = new Vector3 (offsetAxleB.x, offsetAxleB.y - (ElevationLB - WheelLB.radius)/2 - BackAltitudeDifference/2, offsetAxleB.z);
+
+		//Front axle
+		FrontAltitudeDifference = ElevationLF-ElevationRF;
+		FrontLatitudeDifference = Mathf.Abs(WheelRFTransform.transform.localPosition.z-WheelLFTransform.transform.localPosition.z);
+		FrontAngle = Mathf.Atan (FrontAltitudeDifference / FrontLatitudeDifference) * Mathf.Rad2Deg;
+		AxleFront.localEulerAngles = new Vector3(0,0,FrontAngle);
+		AxleFront.localPosition = new Vector3 (offsetAxleF.x, offsetAxleF.y - FrontAltitudeDifference/2, offsetAxleF.z);
+
 	}
 
 	//Calculate the external wheel angle corresponding to the internal in order to get a perfect direction for a vehicle
