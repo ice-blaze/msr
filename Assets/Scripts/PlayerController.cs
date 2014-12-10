@@ -5,8 +5,9 @@ public class PlayerController : MonoBehaviour
 {
    public float oxygen = 1f; // Between 0 and 1;
    public float oxygenDecreasePerSec = 0.05f;
-   public float oxygenGainedPerCapsule = 0.3f;
    public float oxygenDecreasePerSecBoost = 0.05f;
+
+   public float oxygenGainedPerCapsule = 0.3f;
    public bool isBoosted = false;
    public float horsePowerBoostMultiply = 4f;
 
