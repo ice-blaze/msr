@@ -226,14 +226,15 @@ public class PlayerController : MonoBehaviour
 		BackLatitudeDifference = Mathf.Abs(WheelRBTransform.transform.localPosition.z-WheelLBTransform.transform.localPosition.z);
 		BackAngle = Mathf.Atan (BackAltitudeDifference / BackLatitudeDifference) * Mathf.Rad2Deg;
 		AxleBack.localEulerAngles = new Vector3(0,0,BackAngle);
-		AxleBack.localPosition = new Vector3 (offsetAxleB.x, offsetAxleB.y - (ElevationLB - WheelLB.radius)/2 - BackAltitudeDifference/2, offsetAxleB.z);
+	//	AxleBack.localPosition = new Vector3 (offsetAxleB.x, offsetAxleB.y - (ElevationLB - WheelLB.radius)/2 - BackAltitudeDifference/2, offsetAxleB.z);
+		AxleBack.localPosition = new Vector3 (offsetAxleB.x, offsetAxleB.y - ElevationLB + WheelLB.radius, offsetAxleB.z);
 
 		//Front axle
 		FrontAltitudeDifference = ElevationLF-ElevationRF;
 		FrontLatitudeDifference = Mathf.Abs(WheelRFTransform.transform.localPosition.z-WheelLFTransform.transform.localPosition.z);
 		FrontAngle = Mathf.Atan (FrontAltitudeDifference / FrontLatitudeDifference) * Mathf.Rad2Deg;
 		AxleFront.localEulerAngles = new Vector3(0,0,FrontAngle);
-		AxleFront.localPosition = new Vector3 (offsetAxleF.x, offsetAxleF.y - FrontAltitudeDifference/2, offsetAxleF.z);
+		AxleFront.localPosition = new Vector3 (offsetAxleF.x, offsetAxleF.y - ElevationLF + WheelLF.radius, offsetAxleF.z);
 
 	}
 
