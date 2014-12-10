@@ -7,11 +7,25 @@ using System.Collections.Generic;
  */
 public class LevelMenuScript : MonoBehaviour
 {
+	public class Level
+	{
+		public string title;
+		public string highscore;
+		public Texture2D image;
+
+		public Level(int id){
+			string levelFilePath = "Levels/level"+id.ToString()+"/";
+			string[] lines = ((TextAsset) Resources.Load(levelFilePath+"highscore")).text.Split('\n');
+			image = Resources.Load(levelFilePath+"levelImage", typeof(Texture2D)) as Texture2D;
+			title = lines[0];
+			highscore = lines[1];
+		}
+	}
+	
 	InputControllerScript inputController;
 	Animator anima;
 	
-	List<string> levels = new List<string>();
-	List<Texture2D> images = new List<Texture2D>();
+	List<Level> levels = new List<Level>();
 	int actualLevel = 0;
 	int numberLevel = 2;
 
@@ -28,10 +42,8 @@ public class LevelMenuScript : MonoBehaviour
 		levelName = GameObject.Find("level name").GetComponent<TextMesh>();
 		highscore = GameObject.Find("highscore").GetComponent<TextMesh>();
 
-		levels.Add("KATASTROV");
-		images.Add( Resources.Load("Levels/levelimage", typeof(Texture2D)) as Texture2D	);
-		levels.Add("BIG JUMP");
-		images.Add( Resources.Load("Levels/levelimage", typeof(Texture2D)) as Texture2D);
+		levels.Add(new Level(0));
+		levels.Add(new Level(1));
 
 		RefreshText();
 	}
@@ -52,8 +64,14 @@ public class LevelMenuScript : MonoBehaviour
 		//set all speed -1
 //		Debug.Log(animationClips.Length);
 //		anima.get
+		actualLevel--;
+		if(actualLevel==-1)
+		{
+			actualLevel=numberLevel-1;
+		}
+		actualLevel = actualLevel;
+		Debug.Log(actualLevel);
 		anima.SetTrigger("levelinmirror");
-		actualLevel = (actualLevel)%numberLevel;
 	}
 
 	public void endLevelOut()
@@ -64,8 +82,9 @@ public class LevelMenuScript : MonoBehaviour
 			inputController.QuittedLevelMenu();
 		}
 		//change name of froms
-//		Debug.Log(highscore);
+
 		RefreshText();
+
 	}
 
 	public void RenderChild(int boolean)
@@ -75,10 +94,9 @@ public class LevelMenuScript : MonoBehaviour
 
 	public void RefreshText()
    {
-		levelName.text = levels[actualLevel];
-
-		image.renderer.material.mainTexture = images[actualLevel];
-		highscore.text = "99:99.999";
+		levelName.text = levels[actualLevel].title;
+		image.renderer.material.mainTexture = levels[actualLevel].image;
+		highscore.text = levels[actualLevel].highscore;
 	}
 
 	void AnimationFinished()
