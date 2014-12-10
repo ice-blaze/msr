@@ -53,7 +53,7 @@ public class LevelMenuScript : MonoBehaviour
 //		Debug.Log(animationClips.Length);
 //		anima.get
 		anima.SetTrigger("levelinmirror");
-		actualLevel = (actualLevel-1)%numberLevel;
+		actualLevel = (actualLevel)%numberLevel;
 	}
 
 	public void endLevelOut()
@@ -82,17 +82,17 @@ public class LevelMenuScript : MonoBehaviour
 	}
 
 	void AnimationFinished()
-   {
+    {
 		inputController.isAnimated = false;
 	}
 
 	public void Execute()
-   {
-		Application.LoadLevel(actualLevel+1);
+    {
+		Application.LoadLevel(actualLevel);
 	}
 
 	public static void RenderChild(GameObject parent,bool isEnabled)
-   {
+    {
 		foreach(Renderer child in parent.GetComponentsInChildren<Renderer>()){
 			child.renderer.enabled=isEnabled;
 		}
