@@ -171,7 +171,8 @@ public class PlayerController : MonoBehaviour
 			prLF.maxParticleSize = particleSize*currentSpeed/100*particleSize;
 			prLF.particleEmitter.emit = true;
 		}
-		else {
+		else 
+		{
 			wheelPos = WheelLF.transform.position -WheelLF.transform.up* WheelLF.suspensionDistance;
 			ElevationLF = WheelLF.suspensionDistance+WheelLF.radius;
 			prLF.particleEmitter.emit = false;
@@ -184,7 +185,8 @@ public class PlayerController : MonoBehaviour
 			prRF.maxParticleSize = particleSize*currentSpeed/100*particleSize;
 			prRF.particleEmitter.emit = true;
 		}
-		else {
+		else 
+		{
 			wheelPos = WheelRF.transform.position -WheelRF.transform.up* WheelRF.suspensionDistance;
 			ElevationRF = WheelRF.suspensionDistance+WheelRF.radius;
 			prRF.particleEmitter.emit = false;
@@ -197,7 +199,8 @@ public class PlayerController : MonoBehaviour
 			prLB.maxParticleSize = particleSize*currentSpeed/100*particleSize;
 			prLB.particleEmitter.emit = true;
 		}
-		else {
+		else 
+		{
 			wheelPos = WheelLB.transform.position -WheelLB.transform.up* WheelLB.suspensionDistance;
 			ElevationLB = WheelLB.suspensionDistance+WheelLB.radius;
 			prLB.particleEmitter.emit = false;
@@ -210,7 +213,8 @@ public class PlayerController : MonoBehaviour
 			prRB.maxParticleSize = particleSize*currentSpeed/100*particleSize;
 			prRB.particleEmitter.emit = true;
 		}
-		else {
+		else 
+		{
 			wheelPos = WheelRB.transform.position -WheelRB.transform.up* WheelRB.suspensionDistance;
 			ElevationRB = WheelRB.suspensionDistance+WheelRB.radius;
 			prRB.particleEmitter.emit = false;
