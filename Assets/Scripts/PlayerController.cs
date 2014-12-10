@@ -3,6 +3,13 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+   public float oxygen = 1f; // Between 0 and 1;
+   public float oxygenDecreasePerSec = 0.05f;
+   public float oxygenGainedPerCapsule = 0.3f;
+   public float oxygenDecreasePerSecBoost = 0.05f;
+   public bool isBoosted = false;
+   public float horsePowerBoostMultiply = 4f;
+
 	public WheelCollider WheelLF;
 	public WheelCollider WheelLB;
 	public WheelCollider WheelRF;
@@ -47,7 +54,7 @@ public class PlayerController : MonoBehaviour
 	/*void Update()
    {
    }*/
-	
+
 	void Start()
 	{
 		HorsePowerApplied = horsePower;
@@ -64,26 +71,46 @@ public class PlayerController : MonoBehaviour
 
    }
 
-
-   
    void OnTriggerEnter(Collider other)
    {
-      if (other.gameObject.tag == "Finish")
+      switch (other.gameObject.tag) 
       {
+      case "Finish":
+         // TODO.
          Application.LoadLevel("menu");
+         break;
+
+      case "capsule":
+         this.ModifyOxygenByDelta(oxygenGainedPerCapsule);
+         other.gameObject.SetActive (false);
+         break;
       }
    }
-	
+
+   void ModifyOxygenByDelta(float d)
+   {
+      this.oxygen += d;         
+      if (this.oxygen > 1f)
+         this.oxygen = 1f;
+      else if (this.oxygen < 0f)
+         this.oxygen = 0f;
+   }
+
 	void FixedUpdate()
 	{
 		currentSpeed = 2*Mathf.PI*WheelLF.radius*Mathf.Abs(WheelLF.rpm*60/1000);
 		WheelLF.motorTorque = horseToWatt * HorsePowerApplied / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
 		WheelRF.motorTorque = horseToWatt * HorsePowerApplied / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
-		if (Input.GetKey ("space") == true) {
-			HorsePowerApplied = horsePower * 4;
+
+		if (Input.GetKey ("space")) 
+      {
+         this.isBoosted = true;
+         this.ModifyOxygenByDelta (-this.oxygenDecreasePerSecBoost * Time.deltaTime);
+         HorsePowerApplied = horsePower * this.horsePowerBoostMultiply;
 		}
 		else 
-		{
+      {
+         this.isBoosted = false;
 			HorsePowerApplied = horsePower;		
 		}
 		
@@ -113,14 +140,14 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 	void Update()
-	{
+   {
+      this.ModifyOxygenByDelta (-this.oxygenDecreasePerSec * Time.deltaTime);
+
 		WheelLFTransform.Rotate (0,0,WheelLF.rpm / 60 * -360 * Time.deltaTime);
 		WheelRFTransform.Rotate (0,0,WheelRF.rpm / 60 * -360 * Time.deltaTime);
 		WheelLBTransform.Rotate (0,0,WheelLB.rpm / 60 * -360 * Time.deltaTime);
 		WheelRBTransform.Rotate (0,0,WheelRB.rpm / 60 * -360 * Time.deltaTime);
 		
-
-
 		float newLFYAngle = WheelLF.steerAngle;
 		float newRFYAngle = WheelRF.steerAngle;
 
