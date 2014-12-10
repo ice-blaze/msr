@@ -14,7 +14,7 @@ public class OxygenManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Slider slider = gameObject.GetComponent<Slider>();
+		Slider slider = gameObject.GetComponentInChildren<Slider>();
 		slider.value = pc.oxygen;
 	}
 }
