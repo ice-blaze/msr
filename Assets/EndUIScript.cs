@@ -8,18 +8,17 @@ public class EndUIScript : MonoBehaviour {
     Image background;
     Text text;
     float time;
-    Animator asdsasd2;
+    Animator animator;
 
 
 	void Start () {
-        background = GetComponentInChildren<Image>();
-        text = GetComponentInChildren<Text>();
-        asdsasd2 = GetComponent<Animator>();
-        Debug.Log(asdsasd2.animation);
+        this.background = GetComponentInChildren<Image>();
+        this.text = GetComponentInChildren<Text>();
+        this.animator = GetComponent<Animator>();
 	}
 	
 	void Update () {
-        if (isActivated && Time.time-time>2 && Input.anyKey)
+        if (this.isActivated && Time.time-this.time>2 && Input.anyKey)
         {
             Application.LoadLevel("menu");
         }
@@ -27,13 +26,9 @@ public class EndUIScript : MonoBehaviour {
 
     public void Activate()
     {
-        time = Time.time;
-        isActivated = true;
+        this.time = Time.time;
+        this.isActivated = true;
 
-        asdsasd2.SetTrigger("startend");
-//        animation.playAutomatically = true;
-        animation.Play("endui");
-//        text.color = new Color(text.color.r, text.color.g, text.color.b, 1.0f);
-//        background.color = new Color(background.color.r, background.color.g, background.color.b, 0.5f);
+        this.animator.SetTrigger("startend");
     }
 }
