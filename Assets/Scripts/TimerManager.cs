@@ -16,8 +16,6 @@ public class TimerManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		float timer = Time.time-startTime;
-		int t = (int)timer;
-		Debug.Log(t.ToString()+" "+timer.ToString()+" "+(timer-t).ToString());
 		text.text = string.Format("{0:00}:{1:00.000}",(int)timer / 60,timer%60);
 	}
 }

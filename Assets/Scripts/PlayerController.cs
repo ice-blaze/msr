@@ -52,12 +52,15 @@ public class PlayerController : MonoBehaviour
 	public float particleSize;
 
 	public Material skidMaterial;
+
+    private ArrowManager arrowScript;
 	/*void Update()
    {
    }*/
 
 	void Start()
 	{
+        arrowScript = GetComponentInChildren<ArrowManager>();
 		HorsePowerApplied = horsePower;
 		rigidbody.centerOfMass = Vector3.down * 1f;
 		currentSpeed = 0.0f;
@@ -85,6 +88,10 @@ public class PlayerController : MonoBehaviour
          this.ModifyOxygenByDelta(oxygenGainedPerCapsule);
          other.gameObject.SetActive (false);
          break;
+
+        case "checkpoint":
+            this.arrowScript.RemoveCheckPoint(other);
+            break;
       }
    }
 

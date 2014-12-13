@@ -9,7 +9,8 @@ public class OxygenManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		pc = rover.GetComponent<PlayerController>();
+		pc = GetComponentInParent<PlayerController>();
+        Debug.Log(pc.name);
 	}
 	
 	// Update is called once per frame
