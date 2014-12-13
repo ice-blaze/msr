@@ -53,7 +53,10 @@ public class PlayerController : MonoBehaviour
 
 	public Material skidMaterial;
 
-    private ArrowManager arrowScript;
+    ArrowManager arrowScript;
+    EndUIScript endUIScript;
+    TimerManager timerScript;
+    bool endLevel = false;
 	/*void Update()
    {
    }*/
@@ -61,6 +64,13 @@ public class PlayerController : MonoBehaviour
 	void Start()
 	{
         arrowScript = GetComponentInChildren<ArrowManager>();
+        endUIScript = GetComponentInChildren<EndUIScript>();
+        timerScript = GetComponentInChildren<TimerManager>();
+
+        Vector3 vStart = new Vector3(496.7f,95.6f,220.4f);
+        //center the vehicle at start
+        transform.position = vStart;
+
 		HorsePowerApplied = horsePower;
 		rigidbody.centerOfMass = Vector3.down * 1f;
 		currentSpeed = 0.0f;
@@ -75,24 +85,27 @@ public class PlayerController : MonoBehaviour
 
    }
 
-   void OnTriggerEnter(Collider other)
-   {
-      switch (other.gameObject.tag) 
-      {
-      case "Finish":
-         // TODO.
-         Application.LoadLevel("menu");
-         break;
+    void OnTriggerEnter(Collider other)
+    {
+        switch (other.gameObject.tag) 
+        {
+        case "Finish":
+            // TODO.
+            endLevel=true;
+    //            Application.LoadLevel("menu");
+            timerScript.Finish();
+            endUIScript.Activate();
+            break;
 
-      case "capsule":
-         this.ModifyOxygenByDelta(oxygenGainedPerCapsule);
-         other.gameObject.SetActive (false);
-         break;
+        case "capsule":
+            this.ModifyOxygenByDelta(oxygenGainedPerCapsule);
+            other.gameObject.SetActive (false);
+            break;
 
         case "checkpoint":
             this.arrowScript.RemoveCheckPoint(other);
             break;
-      }
+       }
    }
 
    void ModifyOxygenByDelta(float d)
@@ -104,11 +117,17 @@ public class PlayerController : MonoBehaviour
          this.oxygen = 0f;
    }
 
-	void FixedUpdate()
-	{
-		currentSpeed = 2*Mathf.PI*WheelLF.radius*Mathf.Abs(WheelLF.rpm*60/1000);
-		WheelLF.motorTorque = horseToWatt * HorsePowerApplied / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
-		WheelRF.motorTorque = horseToWatt * HorsePowerApplied / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
+    void FixedUpdate()
+    {
+        if (endLevel)
+        {
+            return;
+        }
+
+        currentSpeed = 2*Mathf.PI*WheelLF.radius*Mathf.Abs(WheelLF.rpm*60/1000);
+        WheelLF.motorTorque = horseToWatt * HorsePowerApplied / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
+        WheelRF.motorTorque = horseToWatt * HorsePowerApplied / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
+
 
 		if (Input.GetKey ("space")) 
       {

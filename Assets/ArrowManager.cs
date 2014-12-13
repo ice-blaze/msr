@@ -11,7 +11,6 @@ public class ArrowManager : MonoBehaviour {
 	void Start () {
         arrow = GameObject.Find("Arrow");
 
-
         GameObject checkpoint = GameObject.Find("CheckPoints");
         foreach(Transform g in checkpoint.transform)
         {
