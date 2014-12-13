@@ -67,8 +67,8 @@ public class PlayerController : MonoBehaviour
         endUIScript = GetComponentInChildren<EndUIScript>();
         timerScript = GetComponentInChildren<TimerManager>();
 
-        Vector3 vStart = new Vector3(496.7f,95.6f,220.4f);
         //center the vehicle at start
+        Vector3 vStart = new Vector3(496.7f,95.6f,220.4f);
         transform.position = vStart;
 
 		HorsePowerApplied = horsePower;

@@ -9,16 +9,19 @@ public class EndUIScript : MonoBehaviour {
     Text text;
     float time;
     Animator animator;
-
+    ArrowManager arrowScript;
 
 	void Start () {
         this.background = GetComponentInChildren<Image>();
         this.text = GetComponentInChildren<Text>();
         this.animator = GetComponent<Animator>();
+        this.arrowScript = transform.parent.GetComponentInChildren<ArrowManager>();
 	}
 	
 	void Update () {
-        if (this.isActivated && Time.time-this.time>2 && Input.anyKey)
+        if (this.isActivated && Time.time-this.time>2 
+            && Input.anyKey 
+            && arrowScript.PassTroughAllCheckPoints())
         {
             Application.LoadLevel("menu");
         }
