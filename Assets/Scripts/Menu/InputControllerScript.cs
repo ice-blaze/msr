@@ -66,6 +66,7 @@ public class InputControllerScript : MonoBehaviour
 				break;
 			case Menu.LevelSelection:
             this.levelScript.Execute();
+                actualMenu = Menu.Start;
 				break;
 			case Menu.About:
             this.aboutScript.Quit();

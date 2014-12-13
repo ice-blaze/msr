@@ -90,11 +90,10 @@ public class PlayerController : MonoBehaviour
         switch (other.gameObject.tag) 
         {
         case "Finish":
-            // TODO.
-            endLevel=true;
-    //            Application.LoadLevel("menu");
-            timerScript.Finish();
-            endUIScript.Activate();
+            if(endUIScript.Activate())
+            {
+                endLevel=true;
+            }
             break;
 
         case "capsule":

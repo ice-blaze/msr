@@ -5,6 +5,9 @@ using System.Collections.Generic;
 /**
  * Manage the input into the main menu.
  */
+using UnityEditor;
+
+
 public class LevelMenuScript : MonoBehaviour
 {
 	public class Level
@@ -35,6 +38,7 @@ public class LevelMenuScript : MonoBehaviour
 	
 	void Start()
    {
+        AssetDatabase.Refresh();
 		inputController = GameObject.Find("InputController").GetComponent<InputControllerScript>();
 		anima = GetComponentInParent<Animator>();
 
