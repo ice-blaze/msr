@@ -4,8 +4,8 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
    public float oxygen = 1f; // Between 0 and 1;
-   public float oxygenDecreasePerSec = 0.05f;
-   public float oxygenDecreasePerSecBoost = 0.05f;
+   public float oxygenDecreasePerSec = 0.01f;
+   public float oxygenDecreasePerSecBoost = 0.02f;
 
    public float oxygenGainedPerCapsule = 0.3f;
    public bool isBoosted = false;
@@ -66,10 +66,6 @@ public class PlayerController : MonoBehaviour
         arrowScript = GetComponentInChildren<ArrowManager>();
         endUIScript = GetComponentInChildren<EndUIScript>();
         timerScript = GetComponentInChildren<TimerManager>();
-
-        //center the vehicle at start
-        Vector3 vStart = new Vector3(496.7f,95.6f,220.4f);
-        transform.position = vStart;
 
 		HorsePowerApplied = horsePower;
 		rigidbody.centerOfMass = Vector3.down * 1f;
