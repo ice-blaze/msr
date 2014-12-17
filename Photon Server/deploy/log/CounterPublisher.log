@@ -1,0 +1,5 @@
+2014-12-17 12:41:30,824 [1] INFO  Photon.SocketServer.Diagnostics.CounterPublisher [(null)] - CounterPublisher started on: 255.255.255.255:40001
+2014-12-17 12:41:30,869 [1] INFO  Photon.SocketServer.ApplicationBase [(null)] - Application start: AppId=CounterPublisher; AppPath=D:\Projects\msr\Photon Server\deploy\CounterPublisher, Type=Photon.CounterPublisher.Application 
+2014-12-17 12:41:30,870 [1] INFO  Photon.SocketServer.Diagnostics.CounterPublisher [(null)] - CounterPublisher started on: 255.255.255.255:40001
+2014-12-17 12:42:14,557 [1] INFO  Photon.SocketServer.ApplicationBase [(null)] - Application is stopping: AppId=CounterPublisher
+2014-12-17 12:42:14,568 [1] INFO  Photon.SocketServer.ApplicationBase [(null)] - Application stop: AppId=CounterPublisher
