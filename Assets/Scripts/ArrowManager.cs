@@ -6,10 +6,12 @@ public class ArrowManager : MonoBehaviour {
 
     List<Transform> checkpoints = new List<Transform>();
     GameObject arrow = null;
+	private float baseZscale;
 
 	// Use this for initialization
 	void Start () {
         arrow = GameObject.Find("Arrow");
+		baseZscale = arrow.transform.localScale.x;
 
         GameObject checkpoint = GameObject.Find("CheckPoints");
 		if (checkpoint != null) {
@@ -23,6 +25,8 @@ public class ArrowManager : MonoBehaviour {
 	void Update () {
         Vector3 v = checkpoints[0].transform.position;
         v.y = transform.position.y;
+		float distance = Vector3.Distance (v, arrow.transform.position);
+		arrow.transform.localScale = new Vector3 (arrow.transform.localScale.x, arrow.transform.localScale.y, Mathf.Min(baseZscale* (1 + distance/100), baseZscale*3));
         arrow.transform.LookAt(v);
     }
 
