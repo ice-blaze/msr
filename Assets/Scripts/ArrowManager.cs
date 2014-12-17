@@ -12,10 +12,11 @@ public class ArrowManager : MonoBehaviour {
         arrow = GameObject.Find("Arrow");
 
         GameObject checkpoint = GameObject.Find("CheckPoints");
-        foreach(Transform g in checkpoint.transform)
-        {
-            checkpoints.Add(g);
-        }
+		if (checkpoint != null) {
+			foreach (Transform g in checkpoint.transform) {
+				checkpoints.Add (g);
+			}
+		}
 	}
 	
 	// Update is called once per frame

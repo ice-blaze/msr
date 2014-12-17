@@ -21,7 +21,7 @@ public class SetTimer : MonoBehaviour {
 						if (timerMax > 0.1) {
 								
 								timerMax -= Time.deltaTime;
-								Debug.Log (timerMax);
+//								Debug.Log (timerMax);
 								timerInt = (int)timerMax;
 								txt.text = "" + System.Convert.ToString (timerInt);
 						}
@@ -30,7 +30,7 @@ public class SetTimer : MonoBehaviour {
 		else 
 		{
 			timerMax += Time.deltaTime;
-			Debug.Log (timerMax);
+		//	Debug.Log (timerMax);
 			txt.text = "" + System.Convert.ToString (timerMax);
 		}
 	}

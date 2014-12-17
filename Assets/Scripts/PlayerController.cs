@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
         timerScript = GetComponentInChildren<TimerManager>();
 
 		HorsePowerApplied = horsePower;
-		rigidbody.centerOfMass = Vector3.down * 1f;
+		rigidbody.centerOfMass = Vector3.down * 1.5f;
 		currentSpeed = 0.0f;
 
 		//Compute the vertical and horizontal distance between the wheels in order to make some trigonometry for 
