@@ -53,17 +53,18 @@ public class PlayerController : MonoBehaviour
    
    public Material skidMaterial;
    
-   ArrowManager arrowScript;
+   ArrowManager arrowManager;
    EndUIScript endUIScript;
    TimerManager timerScript;
    bool endLevel = false;
+
    /*void Update()
    {
    }*/
    
    void Start()
    {
-      arrowScript = GetComponentInChildren<ArrowManager>();
+      arrowManager = GetComponentInChildren<ArrowManager>();
       endUIScript = GetComponentInChildren<EndUIScript>();
       timerScript = GetComponentInChildren<TimerManager>();
       
@@ -86,10 +87,8 @@ public class PlayerController : MonoBehaviour
       switch (other.gameObject.tag) 
       {
       case "Finish":
-         if(endUIScript.Activate())
-         {
-            endLevel=true;
-         }
+         if (endUIScript.Activate())
+            this.endLevel = true;
          break;
          
       case "capsule":
@@ -98,7 +97,7 @@ public class PlayerController : MonoBehaviour
          break;
          
       case "checkpoint":
-         this.arrowScript.RemoveCheckPoint(other);
+         this.arrowManager.RemoveCheckPoint(other);
          break;
       }
    }

@@ -29,10 +29,12 @@ public class ArrowManager : MonoBehaviour {
     public void RemoveCheckPoint(Collider other)
     {
 //        checkpoints.Clear();
-        if (checkpoints.Count>0 && other.transform.Equals(checkpoints[0]))
-        {
-            checkpoints.RemoveAt(0);
-        }
+        if (checkpoints.Count > 0 && other.transform.Equals (checkpoints [0])) {
+         
+         Debug.Log (string.Format("checkpoints.size: {0}", this.checkpoints.Count));
+         checkpoints.RemoveAt (0);
+         Debug.Log (string.Format("checkpoints.size: {0}", this.checkpoints.Count));
+      }
     }
 
     public bool PassTroughAllCheckPoints()
