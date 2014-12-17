@@ -56,6 +56,7 @@ public class PlayerController : MonoBehaviour
     ArrowManager arrowScript;
     EndUIScript endUIScript;
     TimerManager timerScript;
+    SoundScript soundScript;
     bool endLevel = false;
 	/*void Update()
    {
@@ -66,6 +67,7 @@ public class PlayerController : MonoBehaviour
         arrowScript = GetComponentInChildren<ArrowManager>();
         endUIScript = GetComponentInChildren<EndUIScript>();
         timerScript = GetComponentInChildren<TimerManager>();
+        soundScript = GetComponent<SoundScript>();
 
 		HorsePowerApplied = horsePower;
 		rigidbody.centerOfMass = Vector3.down * 1f;
@@ -95,6 +97,7 @@ public class PlayerController : MonoBehaviour
         case "capsule":
             this.ModifyOxygenByDelta(oxygenGainedPerCapsule);
             other.gameObject.SetActive (false);
+			this.soundScript.PlayBonus();
             break;
 
         case "checkpoint":
@@ -129,6 +132,7 @@ public class PlayerController : MonoBehaviour
          this.isBoosted = true;
          this.ModifyOxygenByDelta (-this.oxygenDecreasePerSecBoost * Time.deltaTime);
          HorsePowerApplied = horsePower * this.horsePowerBoostMultiply;
+			soundScript.PlayBoost();
 		}
 		else 
       {
