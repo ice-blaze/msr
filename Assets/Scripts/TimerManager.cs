@@ -12,7 +12,8 @@ public class TimerManager : MonoBehaviour {
     bool isFinish;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+   {
         isFinish = false;
 		startTime = Time.time;
 		text = gameObject.GetComponent<Text>();
