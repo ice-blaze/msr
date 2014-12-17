@@ -4,7 +4,7 @@ TODO
 ====
 
 
-* Placer le ou les véhicules à des entroits prédéfinis de départ au démarrage du level (script de la scene)
+* [Greg] DONE Placer le ou les véhicules à des entroits prédéfinis de départ au démarrage du level (script de la scene)
 * [Greg] Faire modèles pour vaisseau départ et capsule arrivé
 * [Greg] Textures par ci par là
 * [Etie] DONE Placer des capsules (à partir du prefab) sur le trajet
@@ -12,7 +12,7 @@ TODO
  * Ajouter une belle flèche
  * DONE Pointe les checkpoints à la suite
  * DONE Avoir passer tous les blocks pour pouvoir finir
-* [Etie] Actuellement, lorsque le véhicule arrive à l'arrivé le menu est directement affiché, il faudrait:
+* [Etie] DONE Actuellement, lorsque le véhicule arrive à l'arrivé le menu est directement affiché, il faudrait:
  * Montrer le score (temps) en gros
  * Faire en sorte que la caméra tourne autour du véhicule
  * OK Le véhicule n'est plus contrôlable
