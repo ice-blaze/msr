@@ -81,13 +81,13 @@ public class InputControllerScript : MonoBehaviour
 			switch(actualMenu)
          {
 			case Menu.LevelSelection:
-            this.levelScript.Quit();
+            	this.levelScript.Quit();
 				break;
 			case Menu.About:
-            this.aboutScript.Quit();
+            	this.aboutScript.Quit();
 				break;
 			case Menu.Start:
-            this.ApplicationQuit();
+            	this.ApplicationQuit();
 				break;
 			default:
 				break;
@@ -217,8 +217,8 @@ public class InputControllerScript : MonoBehaviour
 
 	public static void ApplicationQuit()
    {
-//		Application.Quit();
-		UnityEditor.EditorApplication.isPlaying = false;
+		Application.Quit();
+//		UnityEditor.EditorApplication.isPlaying = false;
 	}
 
 	public static void RenderChild(GameObject parent,bool isEnabled)
