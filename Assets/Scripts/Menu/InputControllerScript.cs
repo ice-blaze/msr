@@ -217,8 +217,11 @@ public class InputControllerScript : MonoBehaviour
 
 	public static void ApplicationQuit()
    {
-		Application.Quit();
-//		UnityEditor.EditorApplication.isPlaying = false;
+		#if UNITY_EDITOR
+			UnityEditor.EditorApplication.isPlaying = false;
+		#else
+			Application.Quit();
+		#endif
 	}
 
 	public static void RenderChild(GameObject parent,bool isEnabled)
