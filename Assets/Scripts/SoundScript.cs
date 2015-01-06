@@ -24,7 +24,6 @@ public class SoundScript : MonoBehaviour {
 	void Start () 
 	{
 		pc = GetComponent<PlayerController>();
-//		audioSource = GetComponents<AudioSource>();
 		motorSource = gameObject.AddComponent<AudioSource>();
 		voiceSource = gameObject.AddComponent<AudioSource>();
 		alarmSource = gameObject.AddComponent<AudioSource>();
@@ -32,6 +31,7 @@ public class SoundScript : MonoBehaviour {
 		boostSource = gameObject.AddComponent<AudioSource>();
 
 		motorSource.clip = motor;
+		motorSource.priority = 256;
 		motorSource.pitch = minMotorPitch;
 		motorSource.loop = true;
 		motorSource.playOnAwake = true;
@@ -47,6 +47,7 @@ public class SoundScript : MonoBehaviour {
 		boostSource.clip = boost;
 		boostSource.pitch = 3.0f;
 		boostSource.loop = true;
+		boostSource.priority = 0;
 
 		voiceSource.pitch = 0.6f;
 		voiceSource.playOnAwake = false;
@@ -56,6 +57,28 @@ public class SoundScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
+		if (pc.oxygen <= 0.3f)
+		{
+			if (!alarmSource.isPlaying)
+			{
+				alarmSource.Play();
+				SayCriticalLevel();
+			}
+		}
+		else
+		{
+			alarmSource.Stop();
+		}
+		
+		if (Input.GetKeyDown("space"))
+		{
+			boostSource.Play();
+		}
+		
+		if (Input.GetKeyUp("space"))
+		{
+			boostSource.Stop();
+		}
 		if(Input.GetAxis("Vertical")>0||Input.GetAxis("Vertical")<0)
 		{
 			if(motorSource.pitch >= maxMotorPitch) 
@@ -75,24 +98,6 @@ public class SoundScript : MonoBehaviour {
 			{
 				motorSource.pitch = 0.0f;
 			}
-		}
-
-		if (pc.oxygen <= 0.3f)
-		{
-			if (!alarmSource.isPlaying)
-			{
-				alarmSource.Play();
-				SayCriticalLevel();
-			}
-		}
-		else
-		{
-			alarmSource.Stop();
-		}
-
-		if (Input.GetKeyUp("space"))
-		{
-			boostSource.Stop();
 		}
 	}
 
