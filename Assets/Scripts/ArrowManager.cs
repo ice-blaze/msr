@@ -5,12 +5,12 @@ public class ArrowManager : MonoBehaviour
 {
    List<Transform> checkpoints = new List<Transform>();
    GameObject arrow;
-   float baseZscale;
+   float baseZscale; // Base local scale.
 
    void Start()
    {
       this.arrow = GameObject.Find("Arrow");
-      baseZscale = arrow.transform.localScale.x;
+      this.baseZscale = arrow.transform.localScale.x;
 
       GameObject checkpoint = GameObject.Find("CheckPoints");
       if (checkpoint != null)
