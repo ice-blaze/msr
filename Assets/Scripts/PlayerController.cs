@@ -203,7 +203,8 @@ public class PlayerController : MonoBehaviour
       }
       WheelLFTransform.position = wheelPos;
       
-      if (Physics.Raycast(WheelRF.transform.position, -WheelRF.transform.up, out hit, WheelRF.radius+WheelRF.suspensionDistance) ){
+      if (Physics.Raycast(WheelRF.transform.position, -WheelRF.transform.up, out hit, WheelRF.radius+WheelRF.suspensionDistance) )
+	  {
          wheelPos = hit.point+WheelRF.transform.up * WheelRF.radius;
          ElevationRF = hit.distance;
          prRF.maxParticleSize = particleSize*currentSpeed/100*particleSize;
@@ -217,7 +218,8 @@ public class PlayerController : MonoBehaviour
       }
       WheelRFTransform.position = wheelPos;
       
-      if (Physics.Raycast(WheelLB.transform.position, -WheelLB.transform.up, out hit, WheelLB.radius+WheelLB.suspensionDistance) ){
+      if (Physics.Raycast(WheelLB.transform.position, -WheelLB.transform.up, out hit, WheelLB.radius+WheelLB.suspensionDistance) )
+	  {
          wheelPos = hit.point+WheelLB.transform.up * WheelLB.radius;
          ElevationLB = hit.distance;
          prLB.maxParticleSize = particleSize*currentSpeed/100*particleSize;
@@ -231,7 +233,8 @@ public class PlayerController : MonoBehaviour
       }
       WheelLBTransform.position = wheelPos;
       
-      if (Physics.Raycast(WheelRB.transform.position, -WheelRB.transform.up, out hit, WheelRB.radius+WheelRB.suspensionDistance) ){
+      if (Physics.Raycast(WheelRB.transform.position, -WheelRB.transform.up, out hit, WheelRB.radius+WheelRB.suspensionDistance) )
+	  {
          wheelPos = hit.point+WheelRB.transform.up * WheelRB.radius;
          ElevationRB = hit.distance;
          prRB.maxParticleSize = particleSize*currentSpeed/100*particleSize;
@@ -249,21 +252,20 @@ public class PlayerController : MonoBehaviour
    //Put the axle with the correct angle, following the wheels
    void AxlePosition()
    {
-      //Back axle
+      //Back Axle - Compute angle and position of back axle to join the two wheels according to the suspensions
       BackAltitudeDifference = ElevationLB-ElevationRB;
       BackLatitudeDifference = Mathf.Abs(WheelRBTransform.transform.localPosition.z-WheelLBTransform.transform.localPosition.z);
       BackAngle = Mathf.Atan (BackAltitudeDifference / BackLatitudeDifference) * Mathf.Rad2Deg;
       AxleBack.localEulerAngles = new Vector3(0,0,BackAngle);
-      // AxleBack.localPosition = new Vector3 (offsetAxleB.x, offsetAxleB.y - (ElevationLB - WheelLB.radius)/2 - BackAltitudeDifference/2, offsetAxleB.z);
       AxleBack.localPosition = new Vector3 (offsetAxleB.x, offsetAxleB.y - ElevationLB + WheelLB.radius, offsetAxleB.z);
       
-      //Front axle
+		
+	  //Front Axle - Compute angle and position of back axle to join the two wheels according to the suspensions
       FrontAltitudeDifference = ElevationLF-ElevationRF;
       FrontLatitudeDifference = Mathf.Abs(WheelRFTransform.transform.localPosition.z-WheelLFTransform.transform.localPosition.z);
       FrontAngle = Mathf.Atan (FrontAltitudeDifference / FrontLatitudeDifference) * Mathf.Rad2Deg;
       AxleFront.localEulerAngles = new Vector3(0,0,FrontAngle);
       AxleFront.localPosition = new Vector3 (offsetAxleF.x, offsetAxleF.y - ElevationLF + WheelLF.radius, offsetAxleF.z);
-      
    }
    
    //Calculate the external wheel angle corresponding to the internal in order to get a perfect direction for a vehicle
