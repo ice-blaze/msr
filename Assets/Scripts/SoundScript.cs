@@ -88,27 +88,12 @@ public class SoundScript : MonoBehaviour {
 		{
 			boostSource.Stop();
 		}
-		if(Input.GetAxis("Vertical")>0||Input.GetAxis("Vertical")<0)
-		{
-			if(motorSource.pitch >= maxMotorPitch) 
-			{
-				return;
-			}
-			if(motorSource.pitch <= minMotorPitch)
-			{
-				motorSource.pitch = minMotorPitch;
-			}
-			motorSource.pitch += 0.03f;
-		} 
-		else if(motorSource.pitch>=minMotorPitch)
-		{
-			motorSource.pitch -= 0.03f;
-			if(motorSource.pitch <= minMotorPitch)
-			{
-				motorSource.pitch = 0.0f;
-			}
-		}
 	}
+
+   public void PlayMotor(float speed)
+   {    
+      motorSource.pitch = Mathf.Min(speed/150.0f,1) * maxMotorPitch;
+   }
 
 	public void PlayBoost()
 	{

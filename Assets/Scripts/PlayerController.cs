@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
    public float oxygenGainedPerCapsule = 0.3f;
    public bool isBoosted = false;
    public float horsePowerBoostMultiply = 4f;
-   
+
    public WheelCollider WheelLF;
    public WheelCollider WheelLB;
    public WheelCollider WheelRF;
@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
    public Transform WheelLBTransform;
    public Transform WheelRFTransform;
    public Transform WheelRBTransform;
+   public float brakeSmogFactor;
+   bool isbraking = false;
    public Transform AxleBack;
    public Transform AxleFront;
    public float currentSpeed;
@@ -48,6 +50,9 @@ public class PlayerController : MonoBehaviour
    public ParticleRenderer prLB;
    public ParticleRenderer prRF;
    public ParticleRenderer prRB;
+
+   public ParticleEmitter peLF;
+   public ParticleEmitter peRF;
    
    public float particleSize;
    
@@ -125,19 +130,27 @@ public class PlayerController : MonoBehaviour
       WheelLF.motorTorque = horseToWatt * HorsePowerApplied / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
       WheelRF.motorTorque = horseToWatt * HorsePowerApplied / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
 
+
+      this.soundScript.PlayMotor(currentSpeed);
       //If the user brake
-      if (Input.GetAxis ("Vertical") == -1 && currentSpeed > 40 && WheelLF.rpm > 0 ||
-         Input.GetAxis ("Vertical") == 1 && currentSpeed > 40 && WheelLF.rpm < 0) {  
+      if (Input.GetAxis ("Vertical") == -1 && currentSpeed > 10 && WheelLF.rpm > 0 ||
+         Input.GetAxis ("Vertical") == 1 && currentSpeed > 10 && WheelLF.rpm < 0) {  
          //And the front wheels touch the ground
          if (Physics.Raycast (WheelLF.transform.position, -WheelLF.transform.up, WheelLF.radius + WheelLF.suspensionDistance) ||
             Physics.Raycast (WheelRF.transform.position, -WheelRF.transform.up, WheelRF.radius + WheelRF.suspensionDistance)) {
             //Produce a brake sound
-            this.soundScript.PlayBrake (); 
+            isbraking = true;
+            this.soundScript.PlayBrake(); 
+         }
+         else
+         {
+            isbraking = false;
          }
       } 
       else 
       {
          this.soundScript.StopBrake();
+         isbraking = false;
       }
       
       
@@ -209,7 +222,16 @@ public class PlayerController : MonoBehaviour
       if (Physics.Raycast(WheelLF.transform.position, -WheelLF.transform.up, out hit, WheelLF.radius+WheelLF.suspensionDistance) ){
          wheelPos = hit.point+WheelLF.transform.up * WheelLF.radius;
          ElevationLF = hit.distance;
-         prLF.maxParticleSize = particleSize*currentSpeed/100*particleSize;
+         prLF.maxParticleSize = currentSpeed/100*particleSize;
+         if(isbraking)
+         {
+            prLF.maxParticleSize *= brakeSmogFactor;
+            peLF.maxSize = 6;
+         }
+         else
+         {
+            peLF.maxSize = 3;
+         }
          prLF.particleEmitter.emit = true;
       }
       else 
@@ -224,7 +246,17 @@ public class PlayerController : MonoBehaviour
 	  {
          wheelPos = hit.point+WheelRF.transform.up * WheelRF.radius;
          ElevationRF = hit.distance;
-         prRF.maxParticleSize = particleSize*currentSpeed/100*particleSize;
+         prRF.maxParticleSize = currentSpeed/100*particleSize;
+         if(isbraking)
+         {
+            prRF.maxParticleSize *= brakeSmogFactor;
+            peRF.maxSize = 6;
+
+         }
+         else
+         {
+            peRF.maxSize = 3;
+         }
          prRF.particleEmitter.emit = true;
       }
       else 
@@ -239,7 +271,7 @@ public class PlayerController : MonoBehaviour
 	  {
          wheelPos = hit.point+WheelLB.transform.up * WheelLB.radius;
          ElevationLB = hit.distance;
-         prLB.maxParticleSize = particleSize*currentSpeed/100*particleSize;
+         prLB.maxParticleSize = currentSpeed/100*particleSize;
          prLB.particleEmitter.emit = true;
       }
       else 
@@ -254,7 +286,7 @@ public class PlayerController : MonoBehaviour
 	  {
          wheelPos = hit.point+WheelRB.transform.up * WheelRB.radius;
          ElevationRB = hit.distance;
-         prRB.maxParticleSize = particleSize*currentSpeed/100*particleSize;
+         prRB.maxParticleSize = currentSpeed/100*particleSize;
          prRB.particleEmitter.emit = true;
       }
       else 
