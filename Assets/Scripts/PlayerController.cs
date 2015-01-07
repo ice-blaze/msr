@@ -258,7 +258,6 @@ public class PlayerController : MonoBehaviour
       BackAngle = Mathf.Atan (BackAltitudeDifference / BackLatitudeDifference) * Mathf.Rad2Deg;
       AxleBack.localEulerAngles = new Vector3(0,0,BackAngle);
       AxleBack.localPosition = new Vector3 (offsetAxleB.x, offsetAxleB.y - ElevationLB + WheelLB.radius, offsetAxleB.z);
-      
 		
 	  //Front Axle - Compute angle and position of back axle to join the two wheels according to the suspensions
       FrontAltitudeDifference = ElevationLF-ElevationRF;
