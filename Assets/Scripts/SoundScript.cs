@@ -8,6 +8,7 @@ public class SoundScript : MonoBehaviour {
 	AudioSource alarmSource;
 	AudioSource bonusSource;
 	AudioSource boostSource;
+	AudioSource brakeSource;
 
 	public float minMotorPitch = 0.0f;
 	public float maxMotorPitch = 4.5f;
@@ -17,6 +18,8 @@ public class SoundScript : MonoBehaviour {
 	public AudioClip critical;
 	public AudioClip bonus;
 	public AudioClip boost;
+	public AudioClip brake;
+
 
 	PlayerController pc;
 
@@ -29,6 +32,7 @@ public class SoundScript : MonoBehaviour {
 		alarmSource = gameObject.AddComponent<AudioSource>();
 		bonusSource = gameObject.AddComponent<AudioSource>();
 		boostSource = gameObject.AddComponent<AudioSource>();
+		brakeSource = gameObject.AddComponent<AudioSource>();
 
 		motorSource.clip = motor;
 		motorSource.priority = 256;
@@ -48,6 +52,11 @@ public class SoundScript : MonoBehaviour {
 		boostSource.pitch = 3.0f;
 		boostSource.loop = true;
 		boostSource.priority = 0;
+
+		brakeSource.clip = brake;
+		brakeSource.pitch = 1.0f;
+		brakeSource.loop = false;
+		brakeSource.priority = 0;
 
 		voiceSource.pitch = 0.6f;
 		voiceSource.playOnAwake = false;
@@ -89,11 +98,11 @@ public class SoundScript : MonoBehaviour {
 			{
 				motorSource.pitch = minMotorPitch;
 			}
-			motorSource.pitch += 0.1f;
+			motorSource.pitch += 0.03f;
 		} 
 		else if(motorSource.pitch>=minMotorPitch)
 		{
-			motorSource.pitch -= 0.1f;
+			motorSource.pitch -= 0.03f;
 			if(motorSource.pitch <= minMotorPitch)
 			{
 				motorSource.pitch = 0.0f;
@@ -108,6 +117,22 @@ public class SoundScript : MonoBehaviour {
 			boostSource.Play();
 		}
 	}
+
+	public void PlayBrake()
+	{
+      if(!brakeSource.isPlaying)
+      {
+         brakeSource.Play();
+      }
+   }
+
+   public void StopBrake()
+   {
+      if(brakeSource.isPlaying)
+      {
+         brakeSource.Stop();
+      }
+   }
 
 	void SayCriticalLevel()
 	{

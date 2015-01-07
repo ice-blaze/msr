@@ -124,6 +124,21 @@ public class PlayerController : MonoBehaviour
       currentSpeed = 2*Mathf.PI*WheelLF.radius*Mathf.Abs(WheelLF.rpm*60/1000);
       WheelLF.motorTorque = horseToWatt * HorsePowerApplied / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
       WheelRF.motorTorque = horseToWatt * HorsePowerApplied / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
+
+      //If the user brake
+      if (Input.GetAxis ("Vertical") == -1 && currentSpeed > 40 && WheelLF.rpm > 0 ||
+         Input.GetAxis ("Vertical") == 1 && currentSpeed > 40 && WheelLF.rpm < 0) {  
+         //And the front wheels touch the ground
+         if (Physics.Raycast (WheelLF.transform.position, -WheelLF.transform.up, WheelLF.radius + WheelLF.suspensionDistance) ||
+            Physics.Raycast (WheelRF.transform.position, -WheelRF.transform.up, WheelRF.radius + WheelRF.suspensionDistance)) {
+            //Produce a brake sound
+            this.soundScript.PlayBrake (); 
+         }
+      } 
+      else 
+      {
+         this.soundScript.StopBrake();
+      }
       
       
       if (Input.GetKey ("space")) 
@@ -138,9 +153,11 @@ public class PlayerController : MonoBehaviour
          HorsePowerApplied = horsePower;     
       }
       
-      WheelLF.brakeTorque = currentSpeed * brakeFriction + frictionCoeff;
-      WheelRF.brakeTorque = currentSpeed * brakeFriction + frictionCoeff;
-      
+      float brake = currentSpeed * brakeFriction + frictionCoeff;
+      WheelLF.brakeTorque = brake;
+      WheelRF.brakeTorque = brake;
+
+     
       float speedFactor = Mathf.Min(rigidbody.velocity.magnitude / 50);
       float currentSteerAngle = Mathf.Lerp(lowSpeedSteerAngle, highSpeedSteerAngle, speedFactor);
       
