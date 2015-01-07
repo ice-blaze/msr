@@ -23,11 +23,14 @@ public class ArrowManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Vector3 v = checkpoints[0].transform.position;
-        v.y = transform.position.y;
-		float distance = Vector3.Distance (v, arrow.transform.position);
-		arrow.transform.localScale = new Vector3 (arrow.transform.localScale.x, arrow.transform.localScale.y, Mathf.Min(baseZscale* (1 + distance/100), baseZscale*3));
-        arrow.transform.LookAt(v);
+		if (checkpoints.Count != 1) 
+		{
+			Vector3 v = checkpoints [0].transform.position;
+			v.y = transform.position.y;
+			float distance = Vector3.Distance (v, arrow.transform.position);
+			arrow.transform.localScale = new Vector3 (arrow.transform.localScale.x, arrow.transform.localScale.y, Mathf.Min (baseZscale * (1 + distance / 100), baseZscale * 3));
+			arrow.transform.LookAt (v);
+		}
     }
 
     public void RemoveCheckPoint(Collider other)
