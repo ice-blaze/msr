@@ -29,7 +29,7 @@ public class LevelMenuScript : MonoBehaviour
 	Animator anima;
 	
 	List<Level> levels = new List<Level>();
-	int actualLevel = 0;
+	int actualLevel = 1;
 	int numberLevel = 2;
 
 	GameObject image;
@@ -54,7 +54,11 @@ public class LevelMenuScript : MonoBehaviour
 
 	public void NextButton(){
 		anima.SetTrigger("levelout");
-		actualLevel = (actualLevel+1)%numberLevel;
+		actualLevel++;
+		if(actualLevel==numberLevel+1){
+			actualLevel=1;
+		}
+		Debug.Log(actualLevel);
 	}
 
 	public void Quit()
@@ -71,16 +75,14 @@ public class LevelMenuScript : MonoBehaviour
 		actualLevel--;
 		if(actualLevel==-1)
 		{
-			actualLevel=numberLevel-1;
+			actualLevel=numberLevel;
 		}
 		actualLevel = actualLevel;
-		Debug.Log(actualLevel);
 		anima.SetTrigger("levelinmirror");
 	}
 
 	public void endLevelOut()
    {
-		Debug.Log("asidasd");
 		if(anima.GetBool("quit")){
 			anima.SetBool("quit",false);
 			inputController.QuittedLevelMenu();
@@ -98,9 +100,9 @@ public class LevelMenuScript : MonoBehaviour
 
 	public void RefreshText()
    {
-		levelName.text = levels[actualLevel].title;
-		image.renderer.material.mainTexture = levels[actualLevel].image;
-		highscore.text = levels[actualLevel].highscore;
+		levelName.text = levels[actualLevel-1].title;
+		image.renderer.material.mainTexture = levels[actualLevel-1].image;
+		highscore.text = levels[actualLevel-1].highscore;
 	}
 
 	void AnimationFinished()
