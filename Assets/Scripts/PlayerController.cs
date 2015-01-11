@@ -140,7 +140,7 @@ public class PlayerController : MonoBehaviour
             Physics.Raycast (WheelRF.transform.position, -WheelRF.transform.up, WheelRF.radius + WheelRF.suspensionDistance)) {
             //Produce a brake sound
             isbraking = true;
-            this.soundScript.PlayBrake(); 
+            this.soundScript.PlayBrake(currentSpeed); 
          }
          else
          {
