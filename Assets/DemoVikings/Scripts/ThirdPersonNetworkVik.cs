@@ -44,17 +44,10 @@ public class ThirdPersonNetworkVik : Photon.MonoBehaviour
 			oxy.setPlayercontrol(controllerScript);
 			cam.setCar(transform);
 
-			Debug.Log(transform.name);
 			cam.enabled = true;
 			oxy.enabled = true;
 			arrow.enabled = true;
 			endui.enabled = true;
-
-			Debug.Log(cam);
-			Debug.Log(oxy);
-			Debug.Log(arrow);
-			Debug.Log(endui);
-
         }
         else
         {           
