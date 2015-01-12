@@ -103,12 +103,13 @@ public class SoundScript : MonoBehaviour {
 		}
 	}
 
-	public void PlayBrake()
+	public void PlayBrake(float speed)
 	{
       if(!brakeSource.isPlaying)
       {
          brakeSource.Play();
       }
+      brakeSource.volume = 0.2f + Mathf.Min (speed / 120.0f, 0.8f);
    }
 
    public void StopBrake()
