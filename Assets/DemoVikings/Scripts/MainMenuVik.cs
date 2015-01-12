@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MainMenuVik : MonoBehaviour
 {
-
+	const int WIDTH = 150;
     void Awake()
     {
         //PhotonNetwork.logLevel = NetworkLogLevel.Full;
@@ -42,7 +42,7 @@ public class MainMenuVik : MonoBehaviour
 
         //Player name
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Player name:", GUILayout.Width(150));
+        GUILayout.Label("Player name:", GUILayout.Width(WIDTH));
         PhotonNetwork.playerName = GUILayout.TextField(PhotonNetwork.playerName);
         if (GUI.changed)//Save name
             PlayerPrefs.SetString("playerName", PhotonNetwork.playerName);
@@ -50,10 +50,16 @@ public class MainMenuVik : MonoBehaviour
 
         GUILayout.Space(15);
 
+		GUILayout.BeginHorizontal();
+		if (GUILayout.Button("SOLO GAME"))
+		{
+			PhotonNetwork.CreateRoom(roomName, new RoomOptions() { maxPlayers = 1 }, TypedLobby.Default);
+		}
+		GUILayout.EndHorizontal();
 
         //Join room by title
         GUILayout.BeginHorizontal();
-        GUILayout.Label("JOIN ROOM:", GUILayout.Width(150));
+        GUILayout.Label("JOIN ROOM:", GUILayout.Width(WIDTH));
         roomName = GUILayout.TextField(roomName);
         if (GUILayout.Button("GO"))
         {
@@ -63,18 +69,18 @@ public class MainMenuVik : MonoBehaviour
 
         //Create a room (fails if exist!)
         GUILayout.BeginHorizontal();
-        GUILayout.Label("CREATE ROOM:", GUILayout.Width(150));
+        GUILayout.Label("CREATE ROOM:", GUILayout.Width(WIDTH));
         roomName = GUILayout.TextField(roomName);
         if (GUILayout.Button("GO"))
         {
             // using null as TypedLobby parameter will also use the default lobby
-            PhotonNetwork.CreateRoom(roomName, new RoomOptions() { maxPlayers = 10 }, TypedLobby.Default);
+            PhotonNetwork.CreateRoom(roomName, new RoomOptions() { maxPlayers = 2 }, TypedLobby.Default);
         }
         GUILayout.EndHorizontal();
 
         //Join random room
         GUILayout.BeginHorizontal();
-        GUILayout.Label("JOIN RANDOM ROOM:", GUILayout.Width(150));
+        GUILayout.Label("JOIN RANDOM ROOM:", GUILayout.Width(WIDTH));
         if (PhotonNetwork.GetRoomList().Length == 0)
         {
             GUILayout.Label("..no games available...");
@@ -92,7 +98,7 @@ public class MainMenuVik : MonoBehaviour
         GUILayout.Label("ROOM LISTING:");
         if (PhotonNetwork.GetRoomList().Length == 0)
         {
-            GUILayout.Label("..no games available..");
+            GUILayout.Label("...no games available...");
         }
         else
         {

@@ -65,6 +65,7 @@ public class PlayerController : MonoBehaviour
    bool endLevel = false;
 
 	private bool isRemotePlayer = true;
+	public bool isRoomLaunch = false;
 
    /*void Update()
    {
@@ -125,6 +126,17 @@ public class PlayerController : MonoBehaviour
    
    void FixedUpdate()
    {
+		if(!isRoomLaunch)
+		{
+			if(PhotonNetwork.room.playerCount==PhotonNetwork.room.maxPlayers){
+				isRoomLaunch = true;
+				PhotonNetwork.room.visible = false;
+			}
+			else
+			{
+				return;
+			}
+		}
 		if (isRemotePlayer) return;
 
       if (endLevel)
@@ -160,7 +172,7 @@ public class PlayerController : MonoBehaviour
       }
       
       
-      if (Input.GetKey ("space")) 
+      if (Input.GetButton("Jump")) 
       {
          this.isBoosted = true;
          this.ModifyOxygenByDelta (-this.oxygenDecPerSecBoost * Time.deltaTime);
@@ -198,6 +210,10 @@ public class PlayerController : MonoBehaviour
          WheelLF.steerAngle = currentSteerAngle;
          WheelRF.steerAngle = currentSteerAngle;
       }
+		if(Input.GetButton("Cancel"))
+		{
+			PhotonNetwork.LeaveRoom();
+		}
    }
    void Update()
    {
@@ -333,6 +349,24 @@ public class PlayerController : MonoBehaviour
 	public void SetIsRemotePlayer(bool val)
 	{
 		isRemotePlayer = val;
+	}
+
+	void OnGUI()
+	{
+		if(!isRoomLaunch)
+		{
+			int width = 200;
+			int height = 150;
+			GUILayout.BeginArea(new Rect((Screen.width - width) / 2, (Screen.height - height) / 2, width, height));
+
+			GUI.color = new Color(255,132,0);
+			GUILayout.Box("Wait on other players...\nEscape to quite ...");
+			GUI.color = Color.white;
+			
+			GUILayout.EndArea();
+		}else{
+			Debug.Log("ALKSJDALKJSD");
+		}
 	}
    
 }

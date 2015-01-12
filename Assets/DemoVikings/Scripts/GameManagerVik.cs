@@ -10,6 +10,10 @@ public class GameManagerVik : Photon.MonoBehaviour {
     void OnJoinedRoom()
     {
         StartGame();
+		if(PhotonNetwork.room.maxPlayers==1)
+		{
+			PhotonNetwork.room.visible=false;
+		}
     }
     
     IEnumerator OnLeftRoom()
@@ -44,10 +48,10 @@ public class GameManagerVik : Photon.MonoBehaviour {
     {
         if (PhotonNetwork.room == null) return; //Only display this GUI when inside a room
 
-        if (GUILayout.Button("Leave Room"))
-        {
-            PhotonNetwork.LeaveRoom();
-        }
+//        if (GUILayout.Button("Leave Room"))
+//        {
+//            PhotonNetwork.LeaveRoom();
+//        }
     }
 
     void OnDisconnectedFromPhoton()
