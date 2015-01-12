@@ -23,18 +23,17 @@ public class CameraController : MonoBehaviour
 	//Quaternion offsetangle;
    
    	// Use this for initialization
-   	void Start()
+   	void Awake()
 	{
-		if(isRemotePlayer) return;
 		cameraXAngleOffset = 0;
 		cameraYAngleOffset = 0;
    	}
+
+
    
    	// Update is called once per frame
    	void LateUpdate()
    	{
-		if(isRemotePlayer) return;
-
 		float wantedAngle = rotationVector.y;
 		float wantedHeight = car.position.y + height;
 		float myAngle = transform.eulerAngles.y;
@@ -66,8 +65,6 @@ public class CameraController : MonoBehaviour
 
 	void FixedUpdate ()
 	{
-		if(isRemotePlayer) return;
-
 		Vector3 localVilocity = car.InverseTransformDirection(car.rigidbody.velocity);
 		if (localVilocity.z < -0.1){
 			rotationVector.y = car.eulerAngles.y + 180;
@@ -79,9 +76,16 @@ public class CameraController : MonoBehaviour
 		camera.fieldOfView = defaultFOV + acc*zoomRatio;
 	}
 
+	public void setCar(Transform g){
+		cameraXAngleOffset = 0;
+		cameraYAngleOffset = 0;
+		car = g;
+	}
+
 	public void SetIsRemotePlayer(bool val)
 	{
 		isRemotePlayer = val;
 	}
+
 }
 

@@ -19,6 +19,7 @@ public class ThirdPersonNetworkVik : Photon.MonoBehaviour
 //		cameraScript = GetComponentInChildren<CameraController>();
 		controllerScript = GetComponent<PlayerController>();
 
+
 		//		cameraVehicle = GetComponentInChildren<Camera>();
 
     }
@@ -34,6 +35,25 @@ public class ThirdPersonNetworkVik : Photon.MonoBehaviour
 			Camera.main.transform.parent = transform;
 			Camera.main.transform.localPosition = new Vector3(0, 2, -10);
 			Camera.main.transform.localEulerAngles = new Vector3(10, 0, 0);
+
+			var cam = Camera.main.GetComponent<CameraController>();
+			var oxy = Camera.main.GetComponentInChildren<OxygenManager>();
+			var arrow = Camera.main.GetComponentInChildren<ArrowManager>();
+			var endui = Camera.main.GetComponentInChildren<EndUIScript>();
+
+			oxy.setPlayercontrol(controllerScript);
+			cam.setCar(transform);
+
+			Debug.Log(transform.name);
+			cam.enabled = true;
+			oxy.enabled = true;
+			arrow.enabled = true;
+			endui.enabled = true;
+
+			Debug.Log(cam);
+			Debug.Log(oxy);
+			Debug.Log(arrow);
+			Debug.Log(endui);
 
         }
         else
