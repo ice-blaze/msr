@@ -8,24 +8,10 @@ http://doc.exitgames.com
 http://forum.exitgames.com
 
 
-*** Version 4.0.0.6 (05. December 2014 - rev2758)
-    Added: ChatApi and LoadBalancingApi folders to Unity SDK. They are needed in any Photon project with Unity. When updating, copy and paste the files over existing ones and make sure to replace the assembly-files, too.
-    Changed: Protocol to save more memory or re-use it. The idea is to have less Garbage Collection (primarily for Unity/PUN and custom types).
-    Added: New CustomType de/serialization methods which provide the MemoryStream, instead of a byte[] COPY from the stream.
-    Changed: Now using one method to identify a Type. This was duplicated code before.
-    Changed: De/Serialization of some types.
-    Note: The drawback is now, that there are more places with: lock(). This is far from optimal but the alternative would be to make Protocol instances per thread. As most is static at the moment, this would not be an easy task.
-    Added: position check for DeserializeStreamFunction() call. Stream position must be "previous + customtype length". It gets corrected but at the moment no error is thrown.
-    Changed: DispatchIncomingCommands() no longer instantiates the commandsToRemove each call. This is reused and thus saves memory.
-    Changed: net_fx build will now check IsConstructedGenericType to detect if something is a dictionary
-LoadBalancing
-    ADDED: LoadBalancingClient.OpJoinOrCreateRoom overload which has lobby as parameter. If a room gets created, this defines in which lobby it belongs.
-    CHANGED: LoadBalancingPeer: Added new error code PluginMismatch, documentation for Plugins parameter code.
-
-
 *** Version 4.0.0.5 (23. September 2014 - rev2738)
     Updated: AddFriends and RemoveFriends doc.
 	Changed: Logging level for two cases. Dropping a package due to failed CRC-check is now logged for INFO. It's expected and certainly not an error. Dropping a package when the incoming challenge does not match is also not an ERROR. It is expected when you switch servers and packages arrive late. This is now debug level ALL.
+
 
 *** Version 4.0.0.4 (19. September 2014 - rev2736)
     Fixed: Fragmentation when CRC checks are enabled. This kept clients from sending fragmented commands when the additional 4 bytes CRC were included later on.

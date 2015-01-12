@@ -180,6 +180,7 @@ public class PhotonEditor : EditorWindow
 
     private static bool dontCheckPunSetupField;
 
+    private static Texture2D HelpIcon;
     private static Texture2D WizardIcon;
 
     protected static Type WindowType = typeof(PhotonEditor);
@@ -219,6 +220,7 @@ public class PhotonEditor : EditorWindow
         EditorApplication.playmodeStateChanged += PlaymodeStateChanged;
         EditorApplication.update += OnUpdate;
 
+        HelpIcon = AssetDatabase.LoadAssetAtPath("Assets/Photon Unity Networking/Editor/PhotonNetwork/help.png", typeof(Texture2D)) as Texture2D;
         WizardIcon = AssetDatabase.LoadAssetAtPath("Assets/Photon Unity Networking/photoncloud-icon.png", typeof(Texture2D)) as Texture2D;
 
         // to be used in toolbar, the enum needs conversion to string[] being done here, once.
@@ -653,7 +655,7 @@ public class PhotonEditor : EditorWindow
         GUILayout.BeginHorizontal();
         this.cloudAppId = EditorGUILayout.TextField(this.cloudAppId);
 
-        open = GUILayout.Toggle(open, PhotonGUI.HelpIcon, GUIStyle.none, GUILayout.ExpandWidth(false));
+        open = GUILayout.Toggle(open, HelpIcon, GUIStyle.none, GUILayout.ExpandWidth(false));
 
         GUILayout.EndHorizontal();
 
@@ -667,7 +669,7 @@ public class PhotonEditor : EditorWindow
 
         GUILayout.BeginHorizontal();
         int toolbarValue = GUILayout.Toolbar((int)selectedRegion, CloudServerRegionNames);   // the enum CloudRegionCode is converted into a string[] in init (toolbar can't use enum)
-        helpRegion = GUILayout.Toggle( helpRegion, PhotonGUI.HelpIcon, GUIStyle.none, GUILayout.ExpandWidth( false ) );
+        helpRegion = GUILayout.Toggle(helpRegion, HelpIcon, GUIStyle.none, GUILayout.ExpandWidth(false));
         GUILayout.EndHorizontal();
 
 

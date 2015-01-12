@@ -23,7 +23,7 @@ using UnityEditor;
 public static class PhotonNetwork
 {
     /// <summary>Version number of PUN. Also used in GameVersion to separate client version from each other.</summary>
-    public const string versionPUN = "1.50";
+    public const string versionPUN = "1.28";
 
     public static string gameVersion
     {
@@ -463,32 +463,6 @@ public static class PhotonNetwork
     /// </remarks>
     public static HashSet<GameObject> SendMonoMessageTargets;
 
-    public static Type SendMonoMessageTargetType = typeof(MonoBehaviour);
-    
-
-    /// <summary>
-    /// Populates SendMonoMessageTargets with currently existing GameObjects that have a Component of type.
-    /// </summary>
-    /// <param name="type">If null, this will use SendMonoMessageTargets as component-type (MonoBehaviour by default).</param>
-    public static void CacheSendMonoMessageTargets(Type type)
-    {
-        if (type == null) type = SendMonoMessageTargetType;
-        PhotonNetwork.SendMonoMessageTargets = FindGameObjectsWithComponent(type);
-    }
-
-    public static HashSet<GameObject> FindGameObjectsWithComponent(Type type)
-    {
-        HashSet<GameObject> objectsWithComponent = new HashSet<GameObject>();
-
-        Component[] targetComponents = (Component[]) GameObject.FindObjectsOfType(type);
-        for (int index = 0; index < targetComponents.Length; index++)
-        {
-            objectsWithComponent.Add(targetComponents[index].gameObject);
-        }
-
-        return objectsWithComponent;
-    }
-
     /// <summary>
     /// The maximum number of players for a room. Better: Set it in CreateRoom.
     /// If no room is opened, this will return 0.
@@ -574,13 +548,12 @@ public static class PhotonNetwork
 
     /// <summary>
     /// Defines if the PhotonNetwork should join the "lobby" when connected to the Master server.
-    /// </summary>
-    /// <remarks>
     /// If this is false, OnConnectedToMaster() will be called when connection to the Master is available.
     /// OnJoinedLobby() will NOT be called if this is false.
     ///
     /// Enabled by default.
-    /// 
+    /// </summary>
+    /// <remarks>
     /// The room listing will not become available.
     /// Rooms can be created and joined (randomly) without joining the lobby (and getting sent the room list).
     /// </remarks>
@@ -614,17 +587,6 @@ public static class PhotonNetwork
         }
     }
 
-    /// <summary>
-    /// The lobby that will be used when PUN joins a lobby or creates a game.
-    /// </summary>
-    /// <remarks>
-    /// The default lobby uses an empty string as name.
-    /// PUN will enter a lobby on the Master Server if autoJoinLobby is set to true. 
-    /// So when you connect or leave a room, PUN automatically gets you into a lobby again.
-    /// 
-    /// Check PhotonNetwork.insideLobby if the client is in a lobby.
-    /// (@ref masterServerAndLobby)
-    /// </remarks>
     public static TypedLobby lobby
     {
         get { return networkingPeer.lobby; }
@@ -1005,8 +967,8 @@ public static class PhotonNetwork
         photonGO.hideFlags = HideFlags.HideInHierarchy;
 
 
-        // Set up the NetworkingPeer and use protocol of PhotonServerSettings
-        networkingPeer = new NetworkingPeer(photonMono, string.Empty, PhotonNetwork.PhotonServerSettings.Protocol);
+        // Set up the NetworkingPeer
+        networkingPeer = new NetworkingPeer(photonMono, string.Empty, ConnectionProtocol.Udp);
 
 
         // Local player
@@ -1014,20 +976,20 @@ public static class PhotonNetwork
     }
 
     /// <summary>
-    /// While offline, the network protocol can be switched (which affects the ports you can use to connect).
+    /// While offline, the network protocol can be switched from UDP to TCP at will but make sure to use the fitting port, too.
     /// </summary>
     /// <remarks>
     /// When you switch the protocol, make sure to also switch the port for the master server. Default ports are:
     /// TCP: 4530
     /// UDP: 5055
     ///
-    /// This could look like this:<br/>
+    /// This could look like this:
     /// Connect(serverAddress, <udpport|tcpport>, appID, gameVersion)
     ///
-    /// Or when you use ConnectUsingSettings(), the PORT in the settings can be switched like so:<br/>
+    /// Or when you use ConnectUsingSettings(), the PORT in the settings can be switched like so:
     /// PhotonNetwork.PhotonServerSettings.ServerPort = 4530;
     ///
-    /// The current protocol can be read this way:<br/>
+    /// The current protocol can be read this way:
     /// PhotonNetwork.networkingPeer.UsedProtocol
     ///
     /// This does not work with the native socket plugin of PUN+ on mobile!
@@ -1049,21 +1011,10 @@ public static class PhotonNetwork
 
         }
 
-        // set up a new NetworkingPeer
-        NetworkingPeer newPeer = new NetworkingPeer(photonMono, String.Empty, cp);
-        newPeer.mAppVersion = networkingPeer.mAppVersion;
-        newPeer.CustomAuthenticationValues = networkingPeer.CustomAuthenticationValues;
-        newPeer.PlayerName= networkingPeer.PlayerName;
-        newPeer.mLocalActor = networkingPeer.mLocalActor;
-        newPeer.DebugOut = networkingPeer.DebugOut;
-        newPeer.CrcEnabled = networkingPeer.CrcEnabled;
-        newPeer.lobby = networkingPeer.lobby;
-        newPeer.LimitOfUnreliableCommands = networkingPeer.LimitOfUnreliableCommands;
-        newPeer.SentCountAllowance = networkingPeer.SentCountAllowance;
-        newPeer.TrafficStatsEnabled = networkingPeer.TrafficStatsEnabled;
+        // Set up the NetworkingPeer
+        networkingPeer = new NetworkingPeer(photonMono, String.Empty, cp);
 
-        networkingPeer = newPeer;
-        Debug.LogWarning("Protocol switched to: " + cp + ".");
+        Debug.Log("Protocol switched to: " + cp);
     }
 
     /// <summary>
@@ -1145,8 +1096,7 @@ public static class PhotonNetwork
         if (PhotonServerSettings.HostType == ServerSettings.HostingOption.SelfHosted)
         {
             networkingPeer.IsUsingNameServer = false;
-            networkingPeer.MasterServerAddress = (PhotonServerSettings.ServerPort == 0) ? PhotonServerSettings.ServerAddress : PhotonServerSettings.ServerAddress + ":" + PhotonServerSettings.ServerPort;
-
+            networkingPeer.MasterServerAddress = PhotonServerSettings.ServerAddress + ":" + PhotonServerSettings.ServerPort;
             return networkingPeer.Connect(networkingPeer.MasterServerAddress, ServerConnection.MasterServer);
         }
 
@@ -1199,7 +1149,7 @@ public static class PhotonNetwork
         networkingPeer.SetApp(appID, gameVersion);
         networkingPeer.IsUsingNameServer = false;
         networkingPeer.IsInitialConnect = true;
-        networkingPeer.MasterServerAddress = (port == 0) ? masterServerAddress : masterServerAddress + ":" + port;
+        networkingPeer.MasterServerAddress = masterServerAddress + ":" + port;
 
         return networkingPeer.Connect(networkingPeer.MasterServerAddress, ServerConnection.MasterServer);
     }
@@ -1720,7 +1670,14 @@ public static class PhotonNetwork
             return false;
         }
 
-        return networkingPeer.OpJoinRandomRoom(expectedCustomRoomProperties, expectedMaxPlayers, null, matchingType, typedLobby, sqlLobbyFilter);
+        Hashtable expectedRoomProperties = new Hashtable();
+        expectedRoomProperties.MergeStringKeys(expectedCustomRoomProperties);
+        if (expectedMaxPlayers > 0)
+        {
+            expectedRoomProperties[GameProperties.MaxPlayers] = expectedMaxPlayers;
+        }
+
+        return networkingPeer.OpJoinRandomRoom(expectedRoomProperties, 0, null, matchingType, typedLobby, sqlLobbyFilter);
     }
 
     /// <summary>On MasterServer this joins the default lobby which list rooms currently in use.</summary>
@@ -1963,24 +1920,6 @@ public static class PhotonNetwork
         return manualId;
     }
 
-
-    /// <summary>
-    /// Enables the Master Client to allocate a viewID that is valid for scene objects.
-    /// </summary>
-    /// <returns>A viewID that can be used for a new PhotonView or -1 in case of an error.</returns>
-    public static int AllocateSceneViewID()
-    {
-        if (!PhotonNetwork.isMasterClient)
-        {
-            Debug.LogError("Only the Master Client can AllocateSceneViewID(). Check PhotonNetwork.isMasterClient!");
-            return -1;
-        }
-
-        int manualId = AllocateViewID(0);
-        manuallyAllocatedViewIds.Add(manualId);
-        return manualId;
-    }
-
     /// <summary>
     /// Unregister a viewID (of manually instantiated and destroyed networked objects).
     /// </summary>
@@ -1991,7 +1930,7 @@ public static class PhotonNetwork
 
         if (networkingPeer.photonViewList.ContainsKey(viewID))
         {
-            Debug.LogWarning(string.Format("UnAllocateViewID() should be called after the PhotonView was destroyed (GameObject.Destroy()). ViewID: {0} still found in: {1}", viewID, networkingPeer.photonViewList[viewID]));
+            Debug.LogWarning(string.Format("Unallocated manually used viewID: {0} but found it used still in a PhotonView: {1}", viewID, networkingPeer.photonViewList[viewID]));
         }
     }
 
@@ -2022,7 +1961,7 @@ public static class PhotonNetwork
             }
 
             // this is the error case: we didn't find any (!) free subId for this user
-            throw new Exception(string.Format("AllocateViewID() failed. Room (user {0}) is out of 'scene' viewIDs. It seems all available are in use.", ownerId));
+            throw new Exception(string.Format("AllocateViewID() failed. Room (user {0}) is out of subIds, as all room viewIDs are used.", ownerId));
         }
         else
         {
@@ -2545,19 +2484,19 @@ public static class PhotonNetwork
     }
 
 
-    /// <summary>
-    /// Enable/disable receiving on given groups (applied to PhotonViews)
-    /// </summary>
-    /// <param name="enableGroups">The interest groups to enable (or null).</param>
-    /// <param name="disableGroups">The interest groups to disable (or null).</param>
-    public static void SetReceivingEnabled(int[] enableGroups, int[] disableGroups)
-    {
-        if (!VerifyCanUseNetwork())
-        {
-            return;
-        }
-        networkingPeer.SetReceivingEnabled(enableGroups, disableGroups);
-    }
+	/// <summary>
+	/// Enable/disable receiving on given groups (applied to PhotonViews)
+	/// </summary>
+	/// <param name="enableGroups">The interest groups to enable (or null).</param>
+	/// <param name="disableGroups">The interest groups to disable (or null).</param>
+	public static void SetReceivingEnabled(int[] enableGroups, int[] disableGroups)
+	{
+		if (!VerifyCanUseNetwork())
+		{
+			return;
+		}
+		networkingPeer.SetReceivingEnabled(enableGroups, disableGroups);
+	}
 
 
     /// <summary>
@@ -2576,19 +2515,19 @@ public static class PhotonNetwork
     }
 
 
-    /// <summary>
-    /// Enable/disable sending on given groups (applied to PhotonViews)
-    /// </summary>
-    /// <param name="enableGroups">The interest groups to enable sending on (or null).</param>
-    /// <param name="disableGroups">The interest groups to disable sending on (or null).</param>
-    public static void SetSendingEnabled(int[] enableGroups, int[] disableGroups)
-    {
-        if (!VerifyCanUseNetwork())
-        {
-            return;
-        }
-        networkingPeer.SetSendingEnabled(enableGroups, disableGroups);
-    }
+	/// <summary>
+	/// Enable/disable sending on given groups (applied to PhotonViews)
+	/// </summary>
+	/// <param name="enableGroups">The interest groups to enable sending on (or null).</param>
+	/// <param name="disableGroups">The interest groups to disable sending on (or null).</param>
+	public static void SetSendingEnabled(int[] enableGroups, int[] disableGroups)
+	{
+		if (!VerifyCanUseNetwork())
+		{
+			return;
+		}
+		networkingPeer.SetSendingEnabled(enableGroups, disableGroups);
+	}
 
 
 

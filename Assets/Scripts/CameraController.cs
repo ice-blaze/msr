@@ -17,6 +17,7 @@ public class CameraController : MonoBehaviour
 	private float cameraYAngleOffset;
 	public float cameraXMaxAngle;
 	public float cameraYMaxAngle;
+	bool isRemotePlayer = false;
    //	public GameObject player;
    	//Vector3 offset;
 	//Quaternion offsetangle;
@@ -24,6 +25,7 @@ public class CameraController : MonoBehaviour
    	// Use this for initialization
    	void Start()
 	{
+		if(isRemotePlayer) return;
 		cameraXAngleOffset = 0;
 		cameraYAngleOffset = 0;
    	}
@@ -31,6 +33,8 @@ public class CameraController : MonoBehaviour
    	// Update is called once per frame
    	void LateUpdate()
    	{
+		if(isRemotePlayer) return;
+
 		float wantedAngle = rotationVector.y;
 		float wantedHeight = car.position.y + height;
 		float myAngle = transform.eulerAngles.y;
@@ -62,6 +66,8 @@ public class CameraController : MonoBehaviour
 
 	void FixedUpdate ()
 	{
+		if(isRemotePlayer) return;
+
 		Vector3 localVilocity = car.InverseTransformDirection(car.rigidbody.velocity);
 		if (localVilocity.z < -0.1){
 			rotationVector.y = car.eulerAngles.y + 180;
@@ -71,6 +77,11 @@ public class CameraController : MonoBehaviour
 		}
 		var acc = car.rigidbody.velocity.magnitude;
 		camera.fieldOfView = defaultFOV + acc*zoomRatio;
+	}
+
+	public void SetIsRemotePlayer(bool val)
+	{
+		isRemotePlayer = val;
 	}
 }
 

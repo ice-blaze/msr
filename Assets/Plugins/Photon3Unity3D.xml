@@ -91,7 +91,7 @@
             <summary> Maximum Transfer Unit to be used for UDP+TCP</summary>
         </member>
         <member name="F:ExitGames.Client.Photon.PeerBase.rhttpMinConnections">
-            <summary> (default=2) Rhttp: minimum number of open connections </summary>
+            <summary> (default=2)) Rhttp: minimum number of open connections </summary>
         </member>
         <member name="F:ExitGames.Client.Photon.PeerBase.rhttpMaxConnections">
             <summary> (default=6) Rhttp: maximum number of open connections, should be > rhttpMinConnections </summary>
@@ -1843,6 +1843,22 @@
             <summary>Uses C# Socket class from System.Net.Sockets (as Unity usually does).</summary>
             <remarks>Incompatible with Windows 8 Store/Phone API.</remarks>
         </member>
+        <member name="T:ExitGames.Client.Photon.SerializeMethod">
+            <summary>
+            Type of serialization methods to add custom type support.
+            Use PhotonPeer.ReisterType() to register new types with serialization and deserialization methods.
+            </summary>
+            <param name="customObject">The method will get objects passed that were registered with it in RegisterType().</param>
+            <returns>Return a byte[] that resembles the object passed in. The framework will surround it with length and type info, so don't include it.</returns>
+        </member>
+        <member name="T:ExitGames.Client.Photon.DeserializeMethod">
+            <summary>
+            Type of deserialization methods to add custom type support.
+            Use PhotonPeer.RegisterType() to register new types with serialization and deserialization methods.
+            </summary>
+            <param name="serializedCustomObject">The framwork passes in the data it got by the associated SerializeMethod. The type code and length are stripped and applied before a DeserializeMethod is called.</param>
+            <returns>Return a object of the type that was associated with this method through RegisterType().</returns>
+        </member>
         <member name="T:ExitGames.Client.Photon.OperationRequest">
             <summary>
             Container for an Operation request, which is a code and parameters.
@@ -1864,12 +1880,12 @@
             The indexer of this class actually provides access to the Parameters Dictionary.
             </summary>
             <remarks>
-            The OperationCode defines the type of operation called on Photon and in turn also the Parameters that
+            The OperationCode defines the type of operation called on Photon and in turn also the Parameters that 
             are set in the request. Those are provided as Dictionary with byte-keys.
-            There are pre-defined constants for various codes defined in the Lite application. Check: LiteOpCode,
+            There are pre-defined constants for various codes defined in the Lite application. Check: LiteOpCode, 
             LiteOpKey, etc.
             <para></para>
-            An operation's request is summarized by the ReturnCode: a short typed code for &quot;Ok&quot; or
+            An operation's request is summarized by the ReturnCode: a short typed code for &quot;Ok&quot; or 
             some different result. The code's meaning is specific per operation. An optional DebugMessage can be
             provided to simplify debugging.
             <para></para>
@@ -1908,7 +1924,7 @@
         </member>
         <member name="T:ExitGames.Client.Photon.EventData">
             <summary>
-            Contains all components of a Photon Event.
+            Contains all components of a Photon Event. 
             Event Parameters, like OperationRequests and OperationResults, consist of a Dictionary with byte-typed keys per value.
             </summary>
             <remarks>
@@ -2044,22 +2060,6 @@
               Null value don't have types.
             </summary>
         </member>
-        <member name="T:ExitGames.Client.Photon.SerializeMethod">
-            <summary>
-            Type of serialization methods to add custom type support.
-            Use PhotonPeer.ReisterType() to register new types with serialization and deserialization methods.
-            </summary>
-            <param name="customObject">The method will get objects passed that were registered with it in RegisterType().</param>
-            <returns>Return a byte[] that resembles the object passed in. The framework will surround it with length and type info, so don't include it.</returns>
-        </member>
-        <member name="T:ExitGames.Client.Photon.DeserializeMethod">
-            <summary>
-            Type of deserialization methods to add custom type support.
-            Use PhotonPeer.RegisterType() to register new types with serialization and deserialization methods.
-            </summary>
-            <param name="serializedCustomObject">The framwork passes in the data it got by the associated SerializeMethod. The type code and length are stripped and applied before a DeserializeMethod is called.</param>
-            <returns>Return a object of the type that was associated with this method through RegisterType().</returns>
-        </member>
         <member name="T:ExitGames.Client.Photon.Protocol">
             <summary>
             Provides tools for the Exit Games Protocol
@@ -2067,14 +2067,14 @@
         </member>
         <member name="M:ExitGames.Client.Photon.Protocol.Serialize(System.Object)">
             <summary>
-            Serialize creates a byte-array from the given object and returns it.
+            Serialize creates a byte-array from the given object and returns it. 
             </summary>
             <param name="obj">The object to serialize</param>
             <returns>The serialized byte-array</returns>
         </member>
         <member name="M:ExitGames.Client.Photon.Protocol.Deserialize(System.Byte[])">
             <summary>
-            Deserialize returns an object reassembled from the given byte-array.
+            Deserialize returns an object reassembled from the given byte-array. 
             </summary>
             <param name="serializedData">The byte-array to be Deserialized</param>
             <returns>The Deserialized object</returns>
@@ -2086,8 +2086,8 @@
         </member>
         <member name="M:ExitGames.Client.Photon.Protocol.Serialize(System.Int16,System.Byte[],System.Int32@)">
             <summary>
-            Serializes a short typed value into a byte-array (target) starting at the also given targetOffset.
-            The altered offset is known to the caller, because it is given via a referenced parameter.
+            Serializes a short typed value into a byte-array (target) starting at the also given targetOffset. 
+            The altered offset is known to the caller, because it is given via a referenced parameter. 
             </summary>
             <param name="value">The short value to be serialized</param>
             <param name="target">The byte-array to serialize the short to</param>
@@ -2095,8 +2095,8 @@
         </member>
         <member name="M:ExitGames.Client.Photon.Protocol.Serialize(System.Int32,System.Byte[],System.Int32@)">
             <summary>
-            Serializes an int typed value into a byte-array (target) starting at the also given targetOffset.
-            The altered offset is known to the caller, because it is given via a referenced parameter.
+            Serializes an int typed value into a byte-array (target) starting at the also given targetOffset. 
+            The altered offset is known to the caller, because it is given via a referenced parameter. 
             </summary>
             <param name="value">The int value to be serialized</param>
             <param name="target">The byte-array to serialize the short to</param>
@@ -2104,8 +2104,8 @@
         </member>
         <member name="M:ExitGames.Client.Photon.Protocol.Serialize(System.Single,System.Byte[],System.Int32@)">
             <summary>
-            Serializes an float typed value into a byte-array (target) starting at the also given targetOffset.
-            The altered offset is known to the caller, because it is given via a referenced parameter.
+            Serializes an float typed value into a byte-array (target) starting at the also given targetOffset. 
+            The altered offset is known to the caller, because it is given via a referenced parameter. 
             </summary>
             <param name="value">The float value to be serialized</param>
             <param name="target">The byte-array to serialize the short to</param>
@@ -2113,9 +2113,9 @@
         </member>
         <member name="M:ExitGames.Client.Photon.Protocol.Deserialize(System.Int16@,System.Byte[],System.Int32@)">
             <summary>
-            Deserialize fills the given short typed value with the given byte-array (source) starting at the also given offset.
-            The result is placed in a variable (value). There is no need to return a value because the parameter value is given by reference.
-            The altered offset is this way also known to the caller.
+            Deserialize fills the given short typed value with the given byte-array (source) starting at the also given offset. 
+            The result is placed in a variable (value). There is no need to return a value because the parameter value is given by reference. 
+            The altered offset is this way also known to the caller. 
             </summary>
             <param name="value">The short value to deserialized into</param>
             <param name="source">The byte-array to deserialize from</param>
@@ -2123,14 +2123,14 @@
         </member>
         <member name="M:ExitGames.Client.Photon.Protocol.DeserializeInteger(System.IO.MemoryStream)">
             <summary>
-            DeserializeInteger returns an Integer typed value from the given Memorystream.
+            DeserializeInteger returns an Integer typed value from the given Memorystream. 
             </summary>
         </member>
         <member name="M:ExitGames.Client.Photon.Protocol.Deserialize(System.Int32@,System.Byte[],System.Int32@)">
             <summary>
-            Deserialize fills the given int typed value with the given byte-array (source) starting at the also given offset.
-            The result is placed in a variable (value). There is no need to return a value because the parameter value is given by reference.
-            The altered offset is this way also known to the caller.
+            Deserialize fills the given int typed value with the given byte-array (source) starting at the also given offset. 
+            The result is placed in a variable (value). There is no need to return a value because the parameter value is given by reference. 
+            The altered offset is this way also known to the caller. 
             </summary>
             <param name="value">The int value to deserialize into</param>
             <param name="source">The byte-array to deserialize from</param>
@@ -2138,9 +2138,9 @@
         </member>
         <member name="M:ExitGames.Client.Photon.Protocol.Deserialize(System.Single@,System.Byte[],System.Int32@)">
             <summary>
-            Deserialize fills the given float typed value with the given byte-array (source) starting at the also given offset.
-            The result is placed in a variable (value). There is no need to return a value because the parameter value is given by reference.
-            The altered offset is this way also known to the caller.
+            Deserialize fills the given float typed value with the given byte-array (source) starting at the also given offset. 
+            The result is placed in a variable (value). There is no need to return a value because the parameter value is given by reference. 
+            The altered offset is this way also known to the caller. 
             </summary>
             <param name="value">The float value to deserialize</param>
             <param name="source">The byte-array to deserialize from</param>

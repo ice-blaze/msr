@@ -1,53 +1,10 @@
-v1.50.1 (17. December 2014)
-Fixed: JoinRandomRoom filtering with the expectedMaxPlayers parameter wasn't working properly. If you create rooms with different maxplayer value, you can now filter them as expected.
-Fixed: PhotonPlayer could not be sent in RPCs or anywhere. It caused an exception "Exception: Serialization failed. Stream position corrupted.", even though you didn't do anything wrong.
-Fixed: PhotonView.viewID initialization. This only affected cases where a PhotonView was added to a GameObject by code at runtime. This was causing multiple different errors. Now the default viewID is 0 as expected by PUN. Before a PhotonView is really usable, it must get a viewID which you generate/select via AllocateViewId().
-
-v1.50 (10. December 2014)
-Added: Chat Api and Chat Demo. The demo is just a basic UI which shows one option to handle input and commands. It should help you to use the very simple ChatClient functionality to build your own GUI for Chat. This can be combined easily with PUN but it's optional.
-Added: Mecanim Support! There is a new component "PhotonAnimatorView" which can be used to synchronize the state of a Mecanim Animator.
-Added: PhotonTransformView, PhotonRigidbodyView, PhotonRigidbody2DView. Each offers several options to smooth movement updates. Also check out their code as inspiration how you can implement your own.
-Added: New Demos: Mecanim, RpgMovement and 2D Jump and Run.
-Added: New feature: Ownership Transfer.
-Added: PhotonView.RequestOwnership() and .TransferOwnership(). Per PhotonView you can define if it can be "taken" by anyone or if the owner gets a "request" to hand over control. A PhotonView can also be "Fixed" and not transfer control at all. This is set as OwnershipOption in Inspector.
-Added: Callback OnOwnershipRequest() where a transfer could be executed (or rejected). For OwnershipOption.Request, this callback is called on the current owner of the PhotonView in question. It can TransferOwnership() but doesn't have to.
-Note: Ownership Transfer would break if you set the transfer-option changes at runtime (as it's not synced). Due to that it's deactivated in Editor when playing.
-Added: Events OwnershipTransfer and OwnershipRequest for internal use.
-New: IPunObservable and IPunCallbacks define the callbacks of PUN to be easier implemented.
-Added: Photon.PunBehaviour which implements all IPunCallbacks. If your scripts derive from this class, they can override the callback methods to implement them. This is easier to write as auto-completion in MonoDevelop and Visual Studio will support you. IPunObservable is not in PunBehaviour - OnPhotonSerializeView() is called too often to have it in all scripts.
-Changed: The PhotonView component has now a list of observed components. You can observe one or multiple components per GameObject, which makes it easier to split tasks across some scripts. Of course you can still observe no script at all (if you use RPCs only on that PhotonView). Existing prefabs with PhotonViews are compatible and will be updated.
-Changed: SendMonoMessage can now be limited to a specific Type. Instead of calling all MonoBehaviour, you could callback only on Photon.Monobehaviour. Set the Type via: PhotonNetwork.SendMonoMessageTargetType. By default, this is MonoBehaviour (as before).
-Added: Option to cache the scripts that get PUN callbacks. With this caching, you can skip expensive FindObjectsOfType() calls when a callback is done. The drawback is that new components won't automatically get the callbacks! They could miss something unless you refresh the caching. Use with care.
-Fixed: Issues with RoomOptions when using Object Initializer syntax. For example "new RoomOptions() { isVisible = false };" now actually sets isVisible of the room. We found this is a known issue in Unity, es discussed here: http://tinyurl.com/pnxrc8r .
-Added: PhotonNetwork.AllocateSceneViewID() to be able to allocate scene view IDs. Only allowed for a Master Client.
-Added: In offline mode, RPCs that are sent to AllViaServer and AllBufferedViaServer will execute locally (immediately). The RPC method will be called in the same frame. Before this, the RPC wasn't called in offline mode for those two settings.
-Fixed: Assignment of minimum ViewId for scenes in Editor. The Application.loadedLevelName is not correct in that case, so better use EditorApplication.currentScene to get the name in Editor. Thanks to paulusul from the forum.
-Changed: The PhotonNetwork constructor creates a NetworkingPeer based on protocol of server settings. This avoids creating another networking peer, unless you deliberately switch protocol. Debug Level and other settings won't be lost due to SwitchProtocol.
-Updated: The Demo for Custom Authentication and Find Friends. It should be a bit easier to use and digest.
-Changed: PhotonViewHandler now assigns a ViewID and InstantiationId to views (was using a "SubId"). Scene objects get the same InstantiationId for all views.
-Removed: NetworkingPeer.instantiatedObjects. PhotonViews are enough to access all instantiated game objects (even including scene objects). Adjusted NetworkingPeer.LocalCleanupAnythingInstantiated(), .DoInstantiate() and .DestroyPlayerObjects() and PhotonView.OnDestroy() accordingly.
-Changed: NetworkingPeer.RemoveInstantiatedGO() to use the creator's ActorNr when cleaning up the Instantiate events.
-Changed: ServerCleanInstantiateAndDestroy(). As scene objects are not created via buffered "Instantiate" events, a "Destroy" has to be buffered instead. This is now done automatically. Destroyed scene objects will be destroyed when a player joins late. Also ServerCleanInstantiateAndDestroy() now expects the creator's ActorNr to remove Instantiate events from the server's buffer. 
-Changed: PhotonView.isSceneView now checks if the creator of an object is 0 (scene). Previously the owner was checked but this can change now.
-Changed: PhotonView.isMine now checks ownerId first. On the Master Client, isMine is also true if isOwnerActive is false! This way, abandoned and scene objects fall to the Master Client.
-Changed: PhotonView.isOwnerActive checks if the owner is 0 (scene). If so, the owner is never active. This is just a shortcut.
-Added: SupportLogger now logs Game Server address when entering a room.
-Changed: Some of the internally used classes are now wrapped in a namespace to avoid clashes with other products.
-
-
-v1.28.2 (13. October 2014)
-Fixed: PUN now loads the new PunSceneSettingsFile no matter where it is in the project. It can be relocated but it gets by default created next to the PunSceneSettings.cs.
-Updated: Included .chm and .pdf documentation files.
-
-v1.28.1 (26. September 2014)
-Fixed: PhotonViewID assignment. This got broken in a subtle way when we added the PunSceneSettings file. Please update. For each scene with any PhotonView in, edit at least one PhotonView.viewID in the inspector and save the scene.
-
 v1.28 (23. September 2014)
 Changed: Compile conditions for WII U should work now! The demos don't run out of the box on Wii U though. You need to adjust some screen settings to get the GUI and input right.
 Changed: Ping on native platforms does not disconnect PUN anymore.
 Updated: FindFriends documentation.
 Added: PunSceneSettings. This allows you to define the minimum value for ViewIDs per scene-file name. This helps to avoid clashes between ViewIDs when switching scenes or loading multiple incrementally. A PunSceneSettingsFile is created and only used in the Editor. Add names of scenes and their minimum ViewID value. Any scene that is not entered, begins at 0. You must edit at any PhotonView in each scene to correct the scene-views! Save the scenes.
 Updated: To library v4.0.0.5 which fixes a problem with CRC Checking and reduces the amount of logging it does. See details in the separate release history file.
+
 
 v1.27 (15. September 2014)
 Updated: Chat can now be used with PUN+ (after a Chat API update)! Updated assemblies and native plugins for PUN+.

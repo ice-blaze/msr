@@ -64,12 +64,16 @@ public class PlayerController : MonoBehaviour
    SoundScript soundScript;
    bool endLevel = false;
 
+	private bool isRemotePlayer = true;
+
    /*void Update()
    {
    }*/
    
    void Start()
    {
+//		Destroy (GameObject.Find ( "Main Camera Menu"));
+
       arrowManager = GetComponentInChildren<ArrowManager>();
       endUIScript = GetComponentInChildren<EndUIScript>();
       timerScript = GetComponentInChildren<TimerManager>();
@@ -121,6 +125,8 @@ public class PlayerController : MonoBehaviour
    
    void FixedUpdate()
    {
+		if (isRemotePlayer) return;
+
       if (endLevel)
       {
          return;
@@ -195,6 +201,8 @@ public class PlayerController : MonoBehaviour
    }
    void Update()
    {
+		if (isRemotePlayer) return;
+
       this.ModifyOxygenByDelta (-this.oxygenDecPerSec * Time.deltaTime);
       
       WheelLFTransform.Rotate (0,0,WheelLF.rpm / 60 * -360 * Time.deltaTime);
@@ -321,6 +329,11 @@ public class PlayerController : MonoBehaviour
    {
       return Mathf.Rad2Deg*Mathf.Atan(verticalWheelBase/((verticalWheelBase/Mathf.Tan(Mathf.Deg2Rad*internalAngle))+horizontalWheelBase));
    }
+
+	public void SetIsRemotePlayer(bool val)
+	{
+		isRemotePlayer = val;
+	}
    
 }
 

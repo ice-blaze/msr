@@ -18,16 +18,12 @@ using ExitGames.Client.Photon;
 
 
 /// <summary>
-/// This enum defines the set of MonoMessages Photon Unity Networking is using as callbacks. Implemented by PunBehaviour.
+/// This enum defines the set of MonoMessages Photon Unity Networking is using as callbacks.
 /// </summary>
 /// <remarks>
-/// Much like "Update()" in Unity, PUN will call methods in specific situations. 
-/// Often, these methods are triggered when network operations complete (example: when joining a room).
-/// 
-/// All those methods are defined and described in this enum and implemented by PunBehaviour 
-/// (which makes it easy to implement them as override).
-/// 
-/// Each entry is the name of such a method and the description tells you when it gets used by PUN.
+/// Much like Unity's "Update()", PUN defines some methods you should know and implement on demand.
+/// Those methods are defined and described in this enum. Each entry is the name of such a method 
+/// and the description tells you when it gets used by PUN.
 /// 
 /// Make sure to read the remarks per entry as some methods have optional parameters.
 /// </remarks>
@@ -38,20 +34,19 @@ public enum PhotonNetworkingMessage
     /// Called when the initial connection got established but before you can use the server. OnJoinedLobby() or OnConnectedToMaster() are called when PUN is ready.
     /// </summary>
     /// <remarks>
-    /// This callback is only useful to detect if the server can be reached at all (technically). 
+    /// This callback is only useful to detect if the server can be reached technically. 
+    /// If this is called, a low level connection is established and PUN will tell the server your AppId, the user, etc in the background.
+    /// This is not called for transitions from the masterserver to game servers.</remarks>
+    /// 
     /// Most often, it's enough to implement OnFailedToConnectToPhoton() and OnDisconnectedFromPhoton().
     /// 
     /// <i>OnJoinedLobby() or OnConnectedToMaster() are called when PUN is ready.</i>
     /// 
-    /// When this is called, the low level connection is established and PUN will send your AppId, the user, etc in the background.
-    /// This is not called for transitions from the masterserver to game servers.
-    /// 
     /// Example: void OnConnectedToPhoton() { ... }
-    /// </remarks>
     OnConnectedToPhoton,
 
     /// <summary>
-    /// Called when the local user/client left a room.
+    /// Called once the local user left a room.
     /// </summary>
     /// <remarks>
     /// When leaving a room, PUN brings you back to the Master Server. 
@@ -65,7 +60,7 @@ public enum PhotonNetworkingMessage
     /// Called after switching to a new MasterClient when the current one leaves. The former already got removed from the player list.
     /// </summary>
     /// <remarks>
-    /// This is not called when this client enters a room.
+    /// This is not called when getting into a room.
     /// 
     /// Example: void OnMasterClientSwitched(PhotonPlayer newMasterClient) { ... }
     /// </remarks>
@@ -98,10 +93,10 @@ public enum PhotonNetworkingMessage
     OnPhotonJoinRoomFailed,
 
     /// <summary>
-    /// Called when this client created a room and entered it. OnJoinedRoom() will be called as well.
+    /// Called when CreateRoom this client created a room and is in it. OnJoinedRoom() will be called next as you entered a room.
     /// </summary>
     /// <remarks>
-    /// This callback is only called on the client which created a room (see PhotonNetwork.CreateRoom).
+    /// This callback is only called on the client which created a room. 
     /// 
     /// As any client might close (or drop connection) anytime, there is a chance that the 
     /// creator of a room does not execute OnCreatedRoom.
@@ -114,7 +109,7 @@ public enum PhotonNetworkingMessage
     OnCreatedRoom,
 
     /// <summary>
-    /// Called on entering a lobby on the Master Server. The actual room-list updates will call OnReceivedRoomListUpdate().
+    /// Called on entering the Master Server's lobby. The actual room-list updates will call OnReceivedRoomListUpdate().
     /// </summary>
     /// <remarks>
     /// Note: When PhotonNetwork.autoJoinLobby is false, OnConnectedToMaster() will be called and the room list won't become available.
@@ -162,7 +157,7 @@ public enum PhotonNetworkingMessage
     /// Called if a connect call to the Photon server failed before the connection was established, followed by a call to OnDisconnectedFromPhoton().
     /// </summary>
     /// <remarks>
-    /// OnConnectionFail only gets called when a connection to a Photon server was established in the first place.
+    /// If the connection was established but then fails, OnConnectionFail is called.
     /// 
     /// Example: void OnFailedToConnectToPhoton(DisconnectCause cause) { ... }
     /// </remarks>
@@ -251,14 +246,10 @@ public enum PhotonNetworkingMessage
     /// Implement to customize the data a PhotonView regularly synchronizes. Called every 'network-update' when observed by PhotonView.
     /// </summary>
     /// <remarks>
-    /// This method will be called in scripts that are assigned as Observed component of a PhotonView.
-    /// PhotonNetwork.sendRateOnSerialize affects how often this method is called.
-    /// PhotonNetwork.sendRate affects how often packages are sent by this client.
+    /// This method is used to customize which data a PhotonView regularly synchronizes. Your code
+    /// defines if something gets sent, what content gets sent and how that gets used on receiving clients.
     /// 
-    /// Implementing this method, you can customize which data a PhotonView regularly synchronizes. 
-    /// Your code defines what is being sent (content) and how your data is used by receiving clients.
-    /// 
-    /// Unlike other callbacks, <i>OnPhotonSerializeView only gets called when it is assigned 
+    /// Unlike other callbacks in this enum, <i>OnPhotonSerializeView only gets called when it is assigned 
     /// to a PhotonView</i> as PhotonView.observed script.
     /// 
     /// To make use of this method, the PhotonStream is essential. It will be in "writing" mode" on the 
@@ -271,16 +262,17 @@ public enum PhotonNetworkingMessage
     /// Note that OnPhotonSerializeView is not called on remote clients when the sender does not send
     /// any update. This can't be used as "x-times per second Update()".
     /// 
+    /// Also see: IPunObservable, which defines this method as interface. Sometimes it's simpler to 
+    /// implement it that way.
+    /// 
     /// Example: void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) { ... }
     /// </remarks>
     OnPhotonSerializeView,
 
     /// <summary>
-    /// Called on all scripts on a GameObject (and children) that have been Instantiated using PhotonNetwork.Instantiate.
+    /// Called on all scripts on a GameObject(and it's children) that have been spawned using PhotonNetwork.Instantiate.
     /// </summary>
     /// <remarks>
-    /// PhotonMessageInfo parameter provides info about who created the object and when (based off PhotonNetworking.time).
-    /// 
     /// Example: void OnPhotonInstantiate(PhotonMessageInfo info) { ... }
     /// </remarks>
     OnPhotonInstantiate,
@@ -376,19 +368,6 @@ public enum PhotonNetworkingMessage
     /// Example: void OnWebRpcResponse(OperationResponse response) { ... }
     /// </remarks>
     OnWebRpcResponse,
-
-    /// <summary>
-    /// Called when another player requests ownership of a PhotonView from you (the current owner).
-    /// </summary>
-    /// <remarks>
-    /// The parameter viewAndPlayer contains:
-    /// 
-    /// PhotonView view = viewAndPlayer[0] as PhotonView;
-    /// 
-    /// PhotonPlayer requestingPlayer = viewAndPlayer[1] as PhotonPlayer;
-    /// </remarks>
-    /// <example>void OnOwnershipRequest(object[] viewAndPlayer) {} //</example>
-    OnOwnershipRequest,
 }
 
 
@@ -448,7 +427,7 @@ public enum LobbyType :byte
 /// Must match order in CloudServerRegionNames and CloudServerRegionPrefixes.
 /// To keep things compatible with older ServerSettings, "none" is the final value, not the first.
 /// </remarks>
-public enum CloudRegionCode { eu = 0, us = 1, asia = 2, jp = 3, au = 5, none = 4 };
+public enum CloudRegionCode { eu, us, asia, jp, none };
 
 /// <summary>Available server (types) for internally used field: server.</summary>
 public enum ServerConnection
