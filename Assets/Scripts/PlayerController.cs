@@ -377,7 +377,7 @@ public class PlayerController : MonoBehaviour
 			GUILayout.BeginArea(new Rect((Screen.width - width) / 2, (Screen.height - height) / 2, width, height));
 
 			GUI.color = new Color(255,132,0);
-			GUILayout.Box("Wait on other players...\nEscape to quite ...");
+			GUILayout.Box("Wait on other players...\nEscap to quite ...");
 			GUI.color = Color.white;
 			
 			GUILayout.EndArea();
