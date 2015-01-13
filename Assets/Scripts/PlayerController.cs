@@ -138,6 +138,7 @@ public class PlayerController : MonoBehaviour
 				isRoomLaunch = true;
 				PhotonNetwork.room.visible = false;
 				timerScript.LaunchTimer();
+				endUIScript.ResetTime();
 			}
 			else
 			{

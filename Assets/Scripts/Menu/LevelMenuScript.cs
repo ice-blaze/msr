@@ -21,7 +21,8 @@ public class LevelMenuScript : MonoBehaviour
 			string[] lines = ((TextAsset) Resources.Load(levelFilePath+"highscore")).text.Split('\n');
 			image = Resources.Load(levelFilePath+"levelImage", typeof(Texture2D)) as Texture2D;
 			title = lines[0];
-			highscore = lines[1];
+			HighscoreManager.SetPath(Application.dataPath+"/");
+			highscore = HighscoreManager.getHighscoreString();
 		}
 	}
 	

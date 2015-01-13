@@ -6,6 +6,7 @@ public class MainMenuVik : MonoBehaviour
 	const int WIDTH = 150;
     void Awake()
     {
+		HighscoreManager.SetPath(Application.dataPath+"/");
         //PhotonNetwork.logLevel = NetworkLogLevel.Full;
 
         //Connect to the main photon server. This is the only IP and port we ever need to set(!)

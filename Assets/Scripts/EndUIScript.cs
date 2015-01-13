@@ -16,12 +16,18 @@ public class EndUIScript : MonoBehaviour {
     float startTime;
 
 	void Start () {
-        this.background = GetComponentInChildren<Image>();
+
+		this.background = GetComponentInChildren<Image>();
         this.text = GetComponentInChildren<Text>();
         this.animator = GetComponent<Animator>();
         this.arrowScript = transform.parent.GetComponentInChildren<ArrowManager>();
         this.timerManager = transform.parent.GetComponentInChildren<TimerManager>();
-        startTime = Time.time;
+		ResetTime();
+	}
+
+	public void ResetTime()
+	{
+		startTime = Time.time;
 	}
 
     float ActualTime()
@@ -39,6 +45,9 @@ public class EndUIScript : MonoBehaviour {
 
     public bool Activate()
     {
+		if(isActivated){
+			return true;
+		}
         if (!arrowScript.PassTroughAllCheckPoints())
         {
             return false;
@@ -50,22 +59,28 @@ public class EndUIScript : MonoBehaviour {
         this.animator.SetTrigger("startend");
 
         //save in file
-        string levelFilePath = "Levels/level"+Application.loadedLevel.ToString()+"/highscore";
-        string[] lines = Regex.Split(((TextAsset) Resources.Load(levelFilePath)).text, "\r\n|\r|\n");
-        string title = lines[0];
-        string highscore = lines[1];
+//        string levelFilePath = "Levels/level"+Application.loadedLevel.ToString()+"/highscore";
 
-        float bestTime = TimerManager.ConvertStringToTime(highscore);
+//        string[] lines = Regex.Split(((TextAsset) Resources.Load(levelFilePath)).text, "\r\n|\r|\n");
+//        string title = lines[0];
+//        string highscore = lines[1];
+		float bestTime = HighscoreManager.getHighscoreFloat();
+
+//        float bestTime = TimerManager.ConvertStringToTime(highscore);
 
         Debug.Log(bestTime+" "+this.time);
         if (bestTime>this.time)
         {
             this.text.text = "You beat the highscore !! press any key to continue.";
+
+			HighscoreManager.setHighscore(this.time);
             //save new highscore
-            StreamWriter sw = new StreamWriter("Assets/Resources/"+levelFilePath+".txt");
-            sw.WriteLine(title);
-            sw.Write(TimerManager.ConvertTimeToString(this.time));
-            sw.Close(); 
+//			string pathComplete = Application.dataPath+"/"+levelFilePath+".txt";
+//			System.IO.Directory.CreateDirectory(pathComplete);
+//			StreamWriter sw = new StreamWriter(pathComplete);
+//            sw.WriteLine(title);
+//            sw.Write(TimerManager.ConvertTimeToString(this.time));
+//            sw.Close(); 
         }
         else
         {
