@@ -36,14 +36,11 @@ public class MainMenuVik : MonoBehaviour
         if (PhotonNetwork.room != null)
             return; //Only when we're not in a Room
 
-
         GUILayout.BeginArea(new Rect((Screen.width - 400) / 2, (Screen.height - 300) / 2, 400, 300));
-
-        GUILayout.Label("Main Menu");
 
         //Player name
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Player name:", GUILayout.Width(WIDTH));
+        GUILayout.Label("YOUR NAME :", GUILayout.Width(WIDTH));
         PhotonNetwork.playerName = GUILayout.TextField(PhotonNetwork.playerName);
         if (GUI.changed)//Save name
             PlayerPrefs.SetString("playerName", PhotonNetwork.playerName);
@@ -52,48 +49,26 @@ public class MainMenuVik : MonoBehaviour
         GUILayout.Space(15);
 
 		GUILayout.BeginHorizontal();
-		if (GUILayout.Button("SOLO GAME"))
+		GUILayout.Label("SOLO PLAYER :",GUILayout.Width(WIDTH));
+		if (GUILayout.Button("Play!"))
 		{
 			PhotonNetwork.CreateRoom(roomName, new RoomOptions() { maxPlayers = 1 }, TypedLobby.Default);
 		}
 		GUILayout.EndHorizontal();
 
-        //Join room by title
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("JOIN ROOM:", GUILayout.Width(WIDTH));
-        roomName = GUILayout.TextField(roomName);
-        if (GUILayout.Button("GO"))
-        {
-            PhotonNetwork.JoinRoom(roomName);
-        }
-        GUILayout.EndHorizontal();
+		GUILayout.Space(15);
 
         //Create a room (fails if exist!)
         GUILayout.BeginHorizontal();
-        GUILayout.Label("CREATE ROOM:", GUILayout.Width(WIDTH));
-        roomName = GUILayout.TextField(roomName);
-        if (GUILayout.Button("GO"))
-        {
-            // using null as TypedLobby parameter will also use the default lobby
-            PhotonNetwork.CreateRoom(roomName, new RoomOptions() { maxPlayers = 2 }, TypedLobby.Default);
-        }
+        GUILayout.Label("TWO  PLAYER :", GUILayout.Width(WIDTH));
+		if (GUILayout.Button("Play!"))
+		{
+			// using null as TypedLobby parameter will also use the default lobby
+			PhotonNetwork.CreateRoom(PhotonNetwork.playerName, new RoomOptions() { maxPlayers = 2 }, TypedLobby.Default);
+		}
+//        roomName = GUILayout.TextField(name);
         GUILayout.EndHorizontal();
 
-        //Join random room
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("JOIN RANDOM ROOM:", GUILayout.Width(WIDTH));
-        if (PhotonNetwork.GetRoomList().Length == 0)
-        {
-            GUILayout.Label("..no games available...");
-        }
-        else
-        {
-            if (GUILayout.Button("GO"))
-            {
-                PhotonNetwork.JoinRandomRoom();
-            }
-        }
-        GUILayout.EndHorizontal();
 
         GUILayout.Space(30);
         GUILayout.Label("ROOM LISTING:");

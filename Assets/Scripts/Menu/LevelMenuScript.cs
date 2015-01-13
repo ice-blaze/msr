@@ -71,15 +71,13 @@ public class LevelMenuScript : MonoBehaviour
 	public void previousButton()
    {
 		//set all speed -1
-//		Debug.Log(animationClips.Length);
 //		anima.get
+		anima.SetTrigger("levelinmirror");
 		actualLevel--;
-		if(actualLevel==-1)
+		if(actualLevel==0)
 		{
 			actualLevel=numberLevel;
 		}
-		actualLevel = actualLevel;
-		anima.SetTrigger("levelinmirror");
 	}
 
 	public void endLevelOut()
@@ -96,7 +94,8 @@ public class LevelMenuScript : MonoBehaviour
 
 	public void RenderChild(int boolean)
    {
-		RenderChild(gameObject,(boolean==0)?true:false);
+		RefreshText();
+		RenderChild(gameObject,boolean==0);
 	}
 
 	public void RefreshText()

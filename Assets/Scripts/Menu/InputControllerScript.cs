@@ -48,15 +48,15 @@ public class InputControllerScript : MonoBehaviour
       if (this.isAnimated)
          return;
 
-		if (Input.GetKeyDown(KeyCode.DownArrow))
+		if (Input.GetButtonDown("Vertical") && Input.GetAxis("Vertical")<0)
       {
 			this.SelectNextButton();
 		} 
-      else if (Input.GetKeyDown(KeyCode.UpArrow))
-      {
+		else if (Input.GetButtonDown("Vertical") && Input.GetAxis("Vertical")>0)
+		{
 			this.SelectPrevButton();
 		}
-      else if (Input.GetKeyDown(KeyCode.Return))
+      else if (Input.GetButtonDown("Submit"))
       {
 			this.isAnimated = true;
 			switch (actualMenu)
@@ -75,7 +75,7 @@ public class InputControllerScript : MonoBehaviour
 				break;
 			}
 		} 
-      else if (Input.GetKeyDown(KeyCode.Escape))
+      else if (Input.GetButton("Cancel"))
       {
          this.isAnimated = true;
 			switch(actualMenu)
