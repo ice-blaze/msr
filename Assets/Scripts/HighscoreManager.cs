@@ -15,6 +15,7 @@ public class HighscoreManager
 		{
 			str+="/";
 		}
+		str+="LevelsHighscore/";
 		path = str;
 	}
 

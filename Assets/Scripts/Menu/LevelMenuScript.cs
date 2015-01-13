@@ -22,7 +22,7 @@ public class LevelMenuScript : MonoBehaviour
 			image = Resources.Load(levelFilePath+"levelImage", typeof(Texture2D)) as Texture2D;
 			title = lines[0];
 			HighscoreManager.SetPath(Application.dataPath);
-			highscore = HighscoreManager.getHighscoreString(id.ToString());
+			highscore = HighscoreManager.getHighscoreString((id+1).ToString());
 		}
 	}
 	
