@@ -234,9 +234,8 @@ public class PlayerController : MonoBehaviour
 
 		//wait until the game start
 		if(!PhotonNetwork.room.visible)
-		{
-      	this.ModifyOxygenByDelta (-this.oxygenDecPerSec * Time.deltaTime);
-		}
+		this.ModifyOxygenByDelta (-this.oxygenDecPerSec * Time.deltaTime);
+
       
       WheelLFTransform.Rotate (0,0,WheelLF.rpm / 60 * -360 * Time.deltaTime);
       WheelRFTransform.Rotate (0,0,WheelRF.rpm / 60 * -360 * Time.deltaTime);
@@ -251,6 +250,12 @@ public class PlayerController : MonoBehaviour
       
       WheelPosition ();
       AxlePosition ();
+
+		if(this.oxygen<=0f) 
+		{
+			endLevel=true;
+			endUIScript.Oxygenfail();
+		}
    }
    
    void WheelPosition()

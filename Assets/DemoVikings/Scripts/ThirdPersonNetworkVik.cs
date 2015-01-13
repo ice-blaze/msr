@@ -5,8 +5,6 @@ using System.Collections;
 public class ThirdPersonNetworkVik : Photon.MonoBehaviour
 {
     ThirdPersonCameraNET cameraScript;
-//    ThirdPersonControllerNET controllerScript;
-//	CameraController cameraScript;
     PlayerController controllerScript;
 
     private bool appliedInitialUpdate;
@@ -14,14 +12,7 @@ public class ThirdPersonNetworkVik : Photon.MonoBehaviour
 
     void Awake()
     {
-//        cameraScript = GetComponent<ThirdPersonCameraNET>();
-//        controllerScript = GetComponent<ThirdPersonControllerNET>();
-//		cameraScript = GetComponentInChildren<CameraController>();
 		controllerScript = GetComponent<PlayerController>();
-
-
-		//		cameraVehicle = GetComponentInChildren<Camera>();
-
     }
     void Start()
     {
@@ -29,8 +20,6 @@ public class ThirdPersonNetworkVik : Photon.MonoBehaviour
         if (photonView.isMine)
         {
             //MINE: local player, simply enable the local scripts
-//            cameraScript.enabled = true;
-//			cameraVehicle.enabled = true;
             controllerScript.enabled = true;
 			Camera.main.transform.parent = transform;
 			Camera.main.transform.localPosition = new Vector3(0, 2, -10);
@@ -51,11 +40,8 @@ public class ThirdPersonNetworkVik : Photon.MonoBehaviour
         }
         else
         {           
-//            cameraScript.enabled = false;
             controllerScript.enabled = true;
-
         }
-//		cameraScript.SetIsRemotePlayer(!photonView.isMine);
         controllerScript.SetIsRemotePlayer(!photonView.isMine);
 
         gameObject.name = gameObject.name + photonView.viewID;

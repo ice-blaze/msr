@@ -14,6 +14,7 @@ public class EndUIScript : MonoBehaviour {
     ArrowManager arrowScript;
     TimerManager timerManager;
     float startTime;
+	bool oxygenFail = false;
 
 	void Start () {
 
@@ -75,4 +76,10 @@ public class EndUIScript : MonoBehaviour {
         return true;
     }
 
+	public void Oxygenfail()
+	{
+		this.animator.SetTrigger("startend");
+		this.text.text = "No more oxygen... But try again !!";
+		isActivated = true;
+	}
 }
