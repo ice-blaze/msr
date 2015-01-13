@@ -48,39 +48,25 @@ public class EndUIScript : MonoBehaviour {
 		if(isActivated){
 			return true;
 		}
-        if (!arrowScript.PassTroughAllCheckPoints())
-        {
-            return false;
-        }
+//        if (!arrowScript.PassTroughAllCheckPoints())
+//        {
+//            return false;
+//        }
 
         this.time = timerManager.Finish();
         this.isActivated = true;
 
         this.animator.SetTrigger("startend");
 
-        //save in file
-//        string levelFilePath = "Levels/level"+Application.loadedLevel.ToString()+"/highscore";
-
-//        string[] lines = Regex.Split(((TextAsset) Resources.Load(levelFilePath)).text, "\r\n|\r|\n");
-//        string title = lines[0];
-//        string highscore = lines[1];
-		float bestTime = HighscoreManager.getHighscoreFloat();
-
-//        float bestTime = TimerManager.ConvertStringToTime(highscore);
+		string levelID = Application.loadedLevel.ToString();
+		float bestTime = HighscoreManager.getHighscoreFloat(levelID);
 
         Debug.Log(bestTime+" "+this.time);
         if (bestTime>this.time)
         {
             this.text.text = "You beat the highscore !! press any key to continue.";
 
-			HighscoreManager.setHighscore(this.time);
-            //save new highscore
-//			string pathComplete = Application.dataPath+"/"+levelFilePath+".txt";
-//			System.IO.Directory.CreateDirectory(pathComplete);
-//			StreamWriter sw = new StreamWriter(pathComplete);
-//            sw.WriteLine(title);
-//            sw.Write(TimerManager.ConvertTimeToString(this.time));
-//            sw.Close(); 
+			HighscoreManager.setHighscore(this.time, levelID);
         }
         else
         {
