@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
       endUIScript = GetComponentInChildren<EndUIScript>();
       timerScript = GetComponentInChildren<TimerManager>();
 	  soundScript = GetComponent<SoundScript>();
-      
+
       HorsePowerApplied = horsePower;
       rigidbody.centerOfMass = Vector3.down * 1.5f;
       currentSpeed = 0.0f;
@@ -137,6 +137,7 @@ public class PlayerController : MonoBehaviour
 			if(PhotonNetwork.room.playerCount==PhotonNetwork.room.maxPlayers){
 				isRoomLaunch = true;
 				PhotonNetwork.room.visible = false;
+				timerScript.LaunchTimer();
 			}
 			else
 			{
@@ -225,7 +226,11 @@ public class PlayerController : MonoBehaviour
    {
 		if (isRemotePlayer) return;
 
-      this.ModifyOxygenByDelta (-this.oxygenDecPerSec * Time.deltaTime);
+		//wait until the game start
+		if(!PhotonNetwork.room.visible)
+		{
+      	this.ModifyOxygenByDelta (-this.oxygenDecPerSec * Time.deltaTime);
+		}
       
       WheelLFTransform.Rotate (0,0,WheelLF.rpm / 60 * -360 * Time.deltaTime);
       WheelRFTransform.Rotate (0,0,WheelRF.rpm / 60 * -360 * Time.deltaTime);

@@ -10,6 +10,7 @@ public class TimerManager : MonoBehaviour {
     float endTime;
 	Text text;
     bool isFinish;
+	bool isStarted = false;
 
 	// Use this for initialization
 	void Start ()
@@ -19,9 +20,19 @@ public class TimerManager : MonoBehaviour {
 		text = gameObject.GetComponent<Text>();
 	}
 
+	public void LaunchTimer()
+	{
+		isStarted=true;
+		startTime = Time.time;
+	}
+
     float ActualTime()
     {
-        return Time.time-startTime;
+		if(isStarted){
+        	return Time.time-startTime;
+		}else{
+			return startTime;
+		}
     }
 	
 	// Update is called once per frame
