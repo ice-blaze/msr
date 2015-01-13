@@ -4,10 +4,57 @@ ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Antennes
+    100004: Arri__re
+    100006: Carroserie
+    100008: Cylinder
+    100010: Face
+    100012: parbrise
+    100014: Roue
+    100016: section antenne
+    100018: Sol
+    100020: Soleil
+    100022: Sphere
     400000: //RootNode
+    400002: Antennes
+    400004: Arri__re
+    400006: Carroserie
+    400008: Cylinder
+    400010: Face
+    400012: parbrise
+    400014: Roue
+    400016: section antenne
+    400018: Sol
+    400020: Soleil
+    400022: Sphere
     2300000: //RootNode
+    2300002: Antennes
+    2300004: Carroserie
+    2300006: Cylinder
+    2300008: parbrise
+    2300010: Roue
+    2300012: section antenne
+    2300014: Sol
+    2300016: Soleil
+    2300018: Sphere
     3300000: //RootNode
+    3300002: Antennes
+    3300004: Carroserie
+    3300006: Cylinder
+    3300008: parbrise
+    3300010: Roue
+    3300012: section antenne
+    3300014: Sol
+    3300016: Soleil
+    3300018: Sphere
     4300000: Sphere
+    4300002: Cylinder
+    4300004: Antennes
+    4300008: Soleil
+    4300010: Sol
+    4300012: Roue
+    4300014: parbrise
+    4300016: Carroserie
     9500000: //RootNode
   materials:
     importMaterials: 1
