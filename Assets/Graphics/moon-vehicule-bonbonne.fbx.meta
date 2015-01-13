@@ -1,68 +1,13 @@
 fileFormatVersion: 2
-guid: 013bb1117d9ce71419a0c3214a3cc7e9
+guid: 96fb522d4885c904994a4b6800e49685
 ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
-    100000: Arri__re
-    100002: Carroserie
-    100004: Cube
-    100006: Cylinder
-    100008: Face
-    100010: //RootNode
-    100012: parbrise
-    100014: Roue
-    100016: Sol
-    100018: Soleil
-    100020: Sphere
-    100022: Antennes
-    100024: R__servoires
-    100026: section antenne
-    400000: Arri__re
-    400002: Carroserie
-    400004: Cube
-    400006: Cylinder
-    400008: Face
-    400010: //RootNode
-    400012: parbrise
-    400014: Roue
-    400016: Sol
-    400018: Soleil
-    400020: Sphere
-    400022: Antennes
-    400024: R__servoires
-    400026: section antenne
-    2300000: Carroserie
-    2300002: Cube
-    2300004: Cylinder
-    2300006: parbrise
-    2300008: Roue
-    2300010: Sol
-    2300012: Soleil
-    2300014: Sphere
-    2300016: Antennes
-    2300018: R__servoires
-    2300020: section antenne
-    3300000: Carroserie
-    3300002: Cube
-    3300004: Cylinder
-    3300006: parbrise
-    3300008: Roue
-    3300010: Sol
-    3300012: Soleil
-    3300014: Sphere
-    3300016: Antennes
-    3300018: R__servoires
-    3300020: section antenne
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
     4300000: Sphere
-    4300002: Cylinder
-    4300004: Cube
-    4300006: Soleil
-    4300008: Sol
-    4300010: Roue
-    4300012: parbrise
-    4300014: Carroserie
-    4300016: R__servoires
-    4300018: Antennes
     9500000: //RootNode
   materials:
     importMaterials: 1
