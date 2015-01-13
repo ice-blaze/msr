@@ -59,7 +59,6 @@ public class LevelMenuScript : MonoBehaviour
 		if(actualLevel==numberLevel+1){
 			actualLevel=1;
 		}
-		Debug.Log(actualLevel);
 	}
 
 	public void Quit()

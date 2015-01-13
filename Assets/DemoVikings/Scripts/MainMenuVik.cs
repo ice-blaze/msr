@@ -21,8 +21,15 @@ public class MainMenuVik : MonoBehaviour
 
     }
 
-    private string roomName = "MSR BEST GAME";
-    private Vector2 scrollPos = Vector2.zero;
+	void Update()
+	{
+		if(Input.GetButton("Cancel"))
+		{
+			Application.LoadLevel(0);
+		}
+	}
+
+	private Vector2 scrollPos = Vector2.zero;
 
     void OnGUI()
     {
@@ -52,7 +59,7 @@ public class MainMenuVik : MonoBehaviour
 		GUILayout.Label("SOLO PLAYER :",GUILayout.Width(WIDTH));
 		if (GUILayout.Button("Play!"))
 		{
-			PhotonNetwork.CreateRoom(roomName, new RoomOptions() { maxPlayers = 1 }, TypedLobby.Default);
+			PhotonNetwork.CreateRoom(PhotonNetwork.playerName, new RoomOptions() { maxPlayers = 1 }, TypedLobby.Default);
 		}
 		GUILayout.EndHorizontal();
 

@@ -3,14 +3,38 @@ using System.Collections.Generic;
 
 public class ArrowManager : MonoBehaviour
 {
+	public class PosRot
+	{
+		public Vector3 position;
+		public Quaternion rotation;
+		
+		public PosRot(Vector3 pos, Quaternion rot)
+		{
+			position = pos;
+			rotation = rot;
+		}
+
+		public void setTransform(Transform t)
+		{
+			position = t.position;
+			rotation = t.rotation;
+		}
+	}
+
    List<Transform> checkpoints = new List<Transform>();
+	PosRot lastCheckpoint;
    GameObject arrow;
    float baseZscale; // Base local scale.
+	PlayerController playerController;
 
    void Start()
    {
+		playerController = GetComponentInParent<PlayerController>();
+
       this.arrow = GameObject.Find("Arrow");
       this.baseZscale = arrow.transform.localScale.x;
+
+		lastCheckpoint =  new PosRot(arrow.transform.position, arrow.transform.rotation);
 
       GameObject checkpoint = GameObject.Find("CheckPoints");
       if (checkpoint != null)
@@ -19,7 +43,7 @@ public class ArrowManager : MonoBehaviour
          checkpoints.Add(g);
       }
    }
-   
+
    void Update()
    {
       if (checkpoints.Count > 0) 
@@ -36,9 +60,8 @@ public class ArrowManager : MonoBehaviour
    {
       if (checkpoints.Count > 0 && other.transform.Equals (checkpoints [0]))
       {   
-         Debug.Log (string.Format("checkpoints.size: {0}", this.checkpoints.Count));
+			lastCheckpoint.setTransform(playerController.transform);
          checkpoints.RemoveAt (0);
-         Debug.Log (string.Format("checkpoints.size: {0}", this.checkpoints.Count));
       }
    }
 
@@ -46,4 +69,9 @@ public class ArrowManager : MonoBehaviour
    {
       return checkpoints.Count == 0;
    }
+
+	public PosRot getLastCheckpoint()
+	{
+		return lastCheckpoint;
+	}
 }

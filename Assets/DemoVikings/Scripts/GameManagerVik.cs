@@ -24,7 +24,7 @@ public class GameManagerVik : Photon.MonoBehaviour {
         while(PhotonNetwork.room!=null || PhotonNetwork.connected==false)
             yield return 0;
 
-        Application.LoadLevel(0);
+//        Application.LoadLevel(0);
 
     }
 
@@ -47,11 +47,6 @@ public class GameManagerVik : Photon.MonoBehaviour {
     void OnGUI()
     {
         if (PhotonNetwork.room == null) return; //Only display this GUI when inside a room
-
-//        if (GUILayout.Button("Leave Room"))
-//        {
-//            PhotonNetwork.LeaveRoom();
-//        }
     }
 
     void OnDisconnectedFromPhoton()

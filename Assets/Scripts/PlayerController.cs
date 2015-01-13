@@ -219,10 +219,14 @@ public class PlayerController : MonoBehaviour
          WheelLF.steerAngle = currentSteerAngle;
          WheelRF.steerAngle = currentSteerAngle;
       }
-		if(Input.GetButton("Cancel"))
-		{
-			PhotonNetwork.LeaveRoom();
+		if(Input.GetButtonDown("LastCheckpoint"))
+		   {
+			transform.position = arrowManager.getLastCheckpoint().position;
+			transform.rotation = arrowManager.getLastCheckpoint().rotation;
+			rigidbody.velocity = Vector3.zero;
+			rigidbody.angularVelocity = Vector3.zero;
 		}
+
    }
    void Update()
    {
@@ -352,7 +356,7 @@ public class PlayerController : MonoBehaviour
       AxleFront.localEulerAngles = new Vector3(0,0,FrontAngle);
       AxleFront.localPosition = new Vector3 (offsetAxleF.x, offsetAxleF.y - ElevationLF + WheelLF.radius, offsetAxleF.z);
    }
-   
+
    //Calculate the external wheel angle corresponding to the internal in order to get a perfect direction for a vehicle
    float getExternalWheelAngle(float internalAngle, float verticalWheelBase, float horizontalWheelBase)
    {
