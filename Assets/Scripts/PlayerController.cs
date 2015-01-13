@@ -91,6 +91,12 @@ public class PlayerController : MonoBehaviour
       //Save the base position of both axle in order to modifiy it according to the suspension
       offsetAxleB = AxleBack.localPosition;
       offsetAxleF = AxleFront.localPosition;
+
+		GameObject respawn = (GameObject)GameObject.FindGameObjectsWithTag("Respawn").GetValue(PhotonNetwork.room.playerCount-1);
+
+		transform.position = respawn.transform.position;
+		transform.rotation = respawn.transform.rotation;
+
       
    }
    
@@ -364,8 +370,6 @@ public class PlayerController : MonoBehaviour
 			GUI.color = Color.white;
 			
 			GUILayout.EndArea();
-		}else{
-			Debug.Log("ALKSJDALKJSD");
 		}
 	}
    
