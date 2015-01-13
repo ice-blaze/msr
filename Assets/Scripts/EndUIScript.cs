@@ -48,10 +48,10 @@ public class EndUIScript : MonoBehaviour {
 		if(isActivated){
 			return true;
 		}
-//        if (!arrowScript.PassTroughAllCheckPoints())
-//        {
-//            return false;
-//        }
+        if (!arrowScript.PassTroughAllCheckPoints())
+        {
+            return false;
+        }
 
         this.time = timerManager.Finish();
         this.isActivated = true;
