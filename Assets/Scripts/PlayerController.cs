@@ -137,6 +137,9 @@ public class PlayerController : MonoBehaviour
    
    void FixedUpdate()
    {
+		if(PhotonNetwork.room.playerCount==PhotonNetwork.room.maxPlayers){
+			isRoomLaunch = true;
+		}
 		if(!isRoomLaunch)
 		{
 			if(PhotonNetwork.room.playerCount==PhotonNetwork.room.maxPlayers){

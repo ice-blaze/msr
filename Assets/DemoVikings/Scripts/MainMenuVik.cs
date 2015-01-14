@@ -25,7 +25,9 @@ public class MainMenuVik : MonoBehaviour
 	{
 		if(Input.GetButton("Cancel"))
 		{
+			PhotonNetwork.LeaveRoom();
 			Application.LoadLevel(0);
+
 		}
 	}
 
