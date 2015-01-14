@@ -135,11 +135,15 @@ public class PlayerController : MonoBehaviour
 		if(!isRoomLaunch)
 		{
 			if(PhotonNetwork.room.playerCount==PhotonNetwork.room.maxPlayers){
-				isRoomLaunch = true;
+
 				PhotonNetwork.room.visible = false;
 				timerScript = GetComponentInChildren<TimerManager>();
-				timerScript.LaunchTimer();
-				endUIScript.ResetTime();
+            if(timerScript != null)
+            {
+               timerScript.LaunchTimer();
+               endUIScript.ResetTime();
+               isRoomLaunch = true;
+            }
 			}
 			else
 			{
