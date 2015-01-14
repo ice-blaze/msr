@@ -102,6 +102,10 @@ public class PlayerController : MonoBehaviour
    
    void OnTriggerEnter(Collider other)
    {
+      if (isRemotePlayer) 
+      {
+         return;
+      }
       switch (other.gameObject.tag) 
       {
       case "Finish":
@@ -119,6 +123,7 @@ public class PlayerController : MonoBehaviour
          this.arrowManager.RemoveCheckPoint(other);
          break;
       }
+      
    }
    
    void ModifyOxygenByDelta(float d)
@@ -138,11 +143,15 @@ public class PlayerController : MonoBehaviour
 		if(!isRoomLaunch)
 		{
 			if(PhotonNetwork.room.playerCount==PhotonNetwork.room.maxPlayers){
-				isRoomLaunch = true;
+
 				PhotonNetwork.room.visible = false;
 				timerScript = GetComponentInChildren<TimerManager>();
-				timerScript.LaunchTimer();
-				endUIScript.ResetTime();
+            if(timerScript != null)
+            {
+               timerScript.LaunchTimer();
+               endUIScript.ResetTime();
+               isRoomLaunch = true;
+            }
 			}
 			else
 			{
