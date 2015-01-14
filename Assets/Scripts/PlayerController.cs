@@ -102,6 +102,10 @@ public class PlayerController : MonoBehaviour
    
    void OnTriggerEnter(Collider other)
    {
+      if (isRemotePlayer) 
+      {
+         return;
+      }
       switch (other.gameObject.tag) 
       {
       case "Finish":
@@ -119,6 +123,7 @@ public class PlayerController : MonoBehaviour
          this.arrowManager.RemoveCheckPoint(other);
          break;
       }
+      
    }
    
    void ModifyOxygenByDelta(float d)
