@@ -163,13 +163,16 @@ public class PlayerController : MonoBehaviour
       {
          return;
       }
-      
+
+      //Compute the vehicle speed according to the front wheel rotation
       currentSpeed = 2*Mathf.PI*WheelLF.radius*Mathf.Abs(WheelLF.rpm*60/1000);
+      //Apply the torque according to the Power of vehicle and the speed (Use a min speed to limit the torque)
       WheelLF.motorTorque = horseToWatt * HorsePowerApplied / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
       WheelRF.motorTorque = horseToWatt * HorsePowerApplied / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
 
-
+      //Play sound of the motor according to the motor speed
       this.soundScript.PlayMotor(currentSpeed);
+
       //If the user brake
       if (Input.GetAxis ("Vertical") == -1 && currentSpeed > 10 && WheelLF.rpm > 0 ||
          Input.GetAxis ("Vertical") == 1 && currentSpeed > 10 && WheelLF.rpm < 0) {  
@@ -203,18 +206,18 @@ public class PlayerController : MonoBehaviour
          this.isBoosted = false;
          HorsePowerApplied = horsePower;     
       }
-      
+
+      //Compute brake torque according to the speed of the vehicle, and friction coefficient
       float brake = currentSpeed * brakeFriction + frictionCoeff;
       WheelLF.brakeTorque = brake;
       WheelRF.brakeTorque = brake;
 
-     
+      //Calculate steer angle of interior wheels according to the speed and the pression on the keyboard
       float speedFactor = Mathf.Min(rigidbody.velocity.magnitude / 50);
       float currentSteerAngle = Mathf.Lerp(lowSpeedSteerAngle, highSpeedSteerAngle, speedFactor);
-      
-      
-      //Steer angle of interior wheel
       currentSteerAngle *= Input.GetAxis("Horizontal");
+
+      //Calculate steer angle of external wheel according to the dimensions and the internal angle
       if (currentSteerAngle > 0) 
       {
          WheelRF.steerAngle = currentSteerAngle;
@@ -247,21 +250,25 @@ public class PlayerController : MonoBehaviour
 		if(!PhotonNetwork.room.visible)
 		this.ModifyOxygenByDelta (-this.oxygenDecPerSec * Time.deltaTime);
 
-      
+      //Rotate the Wheel mesh according to the Wheelcollider speed      
       WheelLFTransform.Rotate (0,0,WheelLF.rpm / 60 * -360 * Time.deltaTime);
       WheelRFTransform.Rotate (0,0,WheelRF.rpm / 60 * -360 * Time.deltaTime);
       WheelLBTransform.Rotate (0,0,WheelLB.rpm / 60 * -360 * Time.deltaTime);
       WheelRBTransform.Rotate (0,0,WheelRB.rpm / 60 * -360 * Time.deltaTime);
-      
+
+      //Apply the computed steer angle for front wheels
       float newLFYAngle = WheelLF.steerAngle;
       float newRFYAngle = WheelRF.steerAngle;
       
       WheelLFTransform.localEulerAngles = new Vector3(WheelLFTransform.localEulerAngles.x, newLFYAngle, WheelLFTransform.localEulerAngles.z);
       WheelRFTransform.localEulerAngles = new Vector3(WheelRFTransform.localEulerAngles.x, newRFYAngle, WheelRFTransform.localEulerAngles.z);
-      
+
+      //Calculate and apply the position of wheel mesh
       WheelPosition ();
+      //Calculate and apply the position and angle of the axles
       AxlePosition ();
 
+      //If player ran out of oxygen, the game is over
 		if(this.oxygen<=0f) 
 		{
 			endLevel=true;
@@ -274,23 +281,28 @@ public class PlayerController : MonoBehaviour
       RaycastHit hit;
       Vector3 wheelPos = new Vector3();
       
-      //FL
-      
-      if (Physics.Raycast(WheelLF.transform.position, -WheelLF.transform.up, out hit, WheelLF.radius+WheelLF.suspensionDistance) ){
+      //Calculate if the wheels touche the floor. 
+      if (Physics.Raycast(WheelLF.transform.position, -WheelLF.transform.up, out hit, WheelLF.radius+WheelLF.suspensionDistance) )
+      {
+         //The wheel touches the floor, hit correspond to the contact point
+         //Calculate the position of the Wheel to display properly
          wheelPos = hit.point+WheelLF.transform.up * WheelLF.radius;
          ElevationLF = hit.distance;
          prLF.maxParticleSize = currentSpeed/100*particleSize;
+         //If the vehicle is braking and the wheel touches the floor, the smog becomes heavier
          if(isbraking)
          {
             prLF.maxParticleSize *= brakeSmogFactor;
             peLF.maxSize = 6;
          }
+         //If the vehicle is not braking, the particule have a normal size
          else
          {
             peLF.maxSize = 3;
          }
          prLF.particleEmitter.emit = true;
       }
+      //If the Wheel does not touch the floor, the wheel is placed at the maximum suspension distance, and does not emit smog
       else 
       {
          wheelPos = WheelLF.transform.position -WheelLF.transform.up* WheelLF.suspensionDistance;
@@ -355,6 +367,7 @@ public class PlayerController : MonoBehaviour
       WheelRBTransform.position = wheelPos;
       
    }
+
    //Put the axle with the correct angle, following the wheels
    void AxlePosition()
    {
@@ -374,6 +387,7 @@ public class PlayerController : MonoBehaviour
    }
 
    //Calculate the external wheel angle corresponding to the internal in order to get a perfect direction for a vehicle
+   //(Epure d'Ackermann)
    float getExternalWheelAngle(float internalAngle, float verticalWheelBase, float horizontalWheelBase)
    {
       return Mathf.Rad2Deg*Mathf.Atan(verticalWheelBase/((verticalWheelBase/Mathf.Tan(Mathf.Deg2Rad*internalAngle))+horizontalWheelBase));
