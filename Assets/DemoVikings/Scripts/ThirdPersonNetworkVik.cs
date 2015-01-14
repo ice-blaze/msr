@@ -20,15 +20,17 @@ public class ThirdPersonNetworkVik : Photon.MonoBehaviour
         if (photonView.isMine)
         {
             //MINE: local player, simply enable the local scripts
-            controllerScript.enabled = true;
 			Camera.main.transform.parent = transform;
 			Camera.main.transform.localPosition = new Vector3(0, 2, -10);
 			Camera.main.transform.localEulerAngles = new Vector3(10, 0, 0);
+
 
 			var cam = Camera.main.GetComponent<CameraController>();
 			var oxy = Camera.main.GetComponentInChildren<OxygenManager>();
 			var arrow = Camera.main.GetComponentInChildren<ArrowManager>();
 			var endui = Camera.main.GetComponentInChildren<EndUIScript>();
+
+			controllerScript.enabled = true;
 
 			oxy.setPlayercontrol(controllerScript);
 			cam.setCar(transform);

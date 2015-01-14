@@ -96,6 +96,8 @@ public class PlayerController : MonoBehaviour
 
 		transform.position = respawn.transform.position;
 		transform.rotation = respawn.transform.rotation;
+		rigidbody.angularVelocity = Vector3.zero;
+		
 
       
    }
@@ -137,28 +139,25 @@ public class PlayerController : MonoBehaviour
    
    void FixedUpdate()
    {
-		if(PhotonNetwork.room.playerCount==PhotonNetwork.room.maxPlayers){
-			isRoomLaunch = true;
-		}
+		if (isRemotePlayer) return;
+
 		if(!isRoomLaunch)
 		{
 			if(PhotonNetwork.room.playerCount==PhotonNetwork.room.maxPlayers){
 
 				PhotonNetwork.room.visible = false;
-				timerScript = GetComponentInChildren<TimerManager>();
-            if(timerScript != null)
-            {
+
                timerScript.LaunchTimer();
                endUIScript.ResetTime();
+				rigidbody.velocity = Vector3.zero;
+				rigidbody.angularVelocity = Vector3.zero;
                isRoomLaunch = true;
-            }
 			}
 			else
 			{
 				return;
 			}
 		}
-		if (isRemotePlayer) return;
 
       if (endLevel)
       {
@@ -387,7 +386,7 @@ public class PlayerController : MonoBehaviour
 
 	void OnGUI()
 	{
-		if(!isRoomLaunch)
+		if(!isRoomLaunch && !isRemotePlayer)
 		{
 			int width = 200;
 			int height = 150;
