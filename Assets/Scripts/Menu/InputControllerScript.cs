@@ -148,7 +148,7 @@ public class InputControllerScript : MonoBehaviour
       this.RenderChild(startMenu, true);
 		
       foreach(GameObject cube in GameObject.FindGameObjectsWithTag("selector"))
-			cube.renderer.enabled = false;
+			cube.GetComponent<Renderer>().enabled = false;
 
 		ButtonScript.selectActual();
 	}
@@ -228,7 +228,7 @@ public class InputControllerScript : MonoBehaviour
    {
 		foreach(Renderer child in parent.GetComponentsInChildren<Renderer>())
       {
-			child.renderer.enabled = isEnabled;
+			child.GetComponent<Renderer>().enabled = isEnabled;
 		}
 	}
 }

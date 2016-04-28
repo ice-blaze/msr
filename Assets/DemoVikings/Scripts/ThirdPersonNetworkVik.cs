@@ -57,7 +57,7 @@ public class ThirdPersonNetworkVik : Photon.MonoBehaviour
            // stream.SendNext((int)controllerScript._characterState);
             stream.SendNext(transform.position);
             stream.SendNext(transform.rotation);
-            stream.SendNext(rigidbody.velocity); 
+            stream.SendNext(GetComponent<Rigidbody>().velocity); 
 
         }
         else
@@ -66,14 +66,14 @@ public class ThirdPersonNetworkVik : Photon.MonoBehaviour
             //controllerScript._characterState = (CharacterState)(int)stream.ReceiveNext();
             correctPlayerPos = (Vector3)stream.ReceiveNext();
             correctPlayerRot = (Quaternion)stream.ReceiveNext();
-            rigidbody.velocity = (Vector3)stream.ReceiveNext();
+            GetComponent<Rigidbody>().velocity = (Vector3)stream.ReceiveNext();
 
             if (!appliedInitialUpdate)
             {
                 appliedInitialUpdate = true;
                 transform.position = correctPlayerPos;
                 transform.rotation = correctPlayerRot;
-                rigidbody.velocity = Vector3.zero;
+                GetComponent<Rigidbody>().velocity = Vector3.zero;
             }
         }
     }

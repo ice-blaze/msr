@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
 	  soundScript = GetComponent<SoundScript>();
 
       HorsePowerApplied = horsePower;
-      rigidbody.centerOfMass = Vector3.down * 1.5f;
+      GetComponent<Rigidbody>().centerOfMass = Vector3.down * 1.5f;
       currentSpeed = 0.0f;
       
       //Compute the vertical and horizontal distance between the wheels in order to make some trigonometry for 
@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
 
 		transform.position = respawn.transform.position;
 		transform.rotation = respawn.transform.rotation;
-		rigidbody.angularVelocity = Vector3.zero;
+		GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 		
 
       
@@ -149,8 +149,8 @@ public class PlayerController : MonoBehaviour
 
                timerScript.LaunchTimer();
                endUIScript.ResetTime();
-				rigidbody.velocity = Vector3.zero;
-				rigidbody.angularVelocity = Vector3.zero;
+				GetComponent<Rigidbody>().velocity = Vector3.zero;
+				GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
                isRoomLaunch = true;
 			}
 			else
@@ -213,7 +213,7 @@ public class PlayerController : MonoBehaviour
       WheelRF.brakeTorque = brake;
 
       //Calculate steer angle of interior wheels according to the speed and the pression on the keyboard
-      float speedFactor = Mathf.Min(rigidbody.velocity.magnitude / 50);
+      float speedFactor = Mathf.Min(GetComponent<Rigidbody>().velocity.magnitude / 50);
       float currentSteerAngle = Mathf.Lerp(lowSpeedSteerAngle, highSpeedSteerAngle, speedFactor);
       currentSteerAngle *= Input.GetAxis("Horizontal");
 
@@ -237,8 +237,8 @@ public class PlayerController : MonoBehaviour
 		   {
 			transform.position = arrowManager.getLastCheckpoint().position;
 			transform.rotation = arrowManager.getLastCheckpoint().rotation;
-			rigidbody.velocity = Vector3.zero;
-			rigidbody.angularVelocity = Vector3.zero;
+			GetComponent<Rigidbody>().velocity = Vector3.zero;
+			GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 		}
 
    }
@@ -300,14 +300,14 @@ public class PlayerController : MonoBehaviour
          {
             peLF.maxSize = 3;
          }
-         prLF.particleEmitter.emit = true;
+         prLF.GetComponent<ParticleEmitter>().emit = true;
       }
       //If the Wheel does not touch the floor, the wheel is placed at the maximum suspension distance, and does not emit smog
       else 
       {
          wheelPos = WheelLF.transform.position -WheelLF.transform.up* WheelLF.suspensionDistance;
          ElevationLF = WheelLF.suspensionDistance+WheelLF.radius;
-         prLF.particleEmitter.emit = false;
+         prLF.GetComponent<ParticleEmitter>().emit = false;
       }
       WheelLFTransform.position = wheelPos;
       
@@ -326,13 +326,13 @@ public class PlayerController : MonoBehaviour
          {
             peRF.maxSize = 3;
          }
-         prRF.particleEmitter.emit = true;
+         prRF.GetComponent<ParticleEmitter>().emit = true;
       }
       else 
       {
          wheelPos = WheelRF.transform.position -WheelRF.transform.up* WheelRF.suspensionDistance;
          ElevationRF = WheelRF.suspensionDistance+WheelRF.radius;
-         prRF.particleEmitter.emit = false;
+         prRF.GetComponent<ParticleEmitter>().emit = false;
       }
       WheelRFTransform.position = wheelPos;
       
@@ -341,13 +341,13 @@ public class PlayerController : MonoBehaviour
          wheelPos = hit.point+WheelLB.transform.up * WheelLB.radius;
          ElevationLB = hit.distance;
          prLB.maxParticleSize = currentSpeed/100*particleSize;
-         prLB.particleEmitter.emit = true;
+         prLB.GetComponent<ParticleEmitter>().emit = true;
       }
       else 
       {
          wheelPos = WheelLB.transform.position -WheelLB.transform.up* WheelLB.suspensionDistance;
          ElevationLB = WheelLB.suspensionDistance+WheelLB.radius;
-         prLB.particleEmitter.emit = false;
+         prLB.GetComponent<ParticleEmitter>().emit = false;
       }
       WheelLBTransform.position = wheelPos;
       
@@ -356,13 +356,13 @@ public class PlayerController : MonoBehaviour
          wheelPos = hit.point+WheelRB.transform.up * WheelRB.radius;
          ElevationRB = hit.distance;
          prRB.maxParticleSize = currentSpeed/100*particleSize;
-         prRB.particleEmitter.emit = true;
+         prRB.GetComponent<ParticleEmitter>().emit = true;
       }
       else 
       {
          wheelPos = WheelRB.transform.position -WheelRB.transform.up* WheelRB.suspensionDistance;
          ElevationRB = WheelRB.suspensionDistance+WheelRB.radius;
-         prRB.particleEmitter.emit = false;
+         prRB.GetComponent<ParticleEmitter>().emit = false;
       }
       WheelRBTransform.position = wheelPos;
       

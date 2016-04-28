@@ -65,15 +65,15 @@ public class CameraController : MonoBehaviour
 
 	void FixedUpdate ()
 	{
-		Vector3 localVilocity = car.InverseTransformDirection(car.rigidbody.velocity);
+		Vector3 localVilocity = car.InverseTransformDirection(car.GetComponent<Rigidbody>().velocity);
 		if (localVilocity.z < -0.1){
 			rotationVector.y = car.eulerAngles.y + 180;
 		}
 		else {
 			rotationVector.y = car.eulerAngles.y;
 		}
-		var acc = car.rigidbody.velocity.magnitude;
-		camera.fieldOfView = defaultFOV + acc*zoomRatio;
+		var acc = car.GetComponent<Rigidbody>().velocity.magnitude;
+		GetComponent<Camera>().fieldOfView = defaultFOV + acc*zoomRatio;
 	}
 
 	public void setCar(Transform g){

@@ -49,7 +49,7 @@ public class Label : MonoBehaviour
 			return;
 		}
 		
-		Vector3 worldPosition = collider.bounds.center + Vector3.up * collider.bounds.size.y * 0.5f;
+		Vector3 worldPosition = GetComponent<Collider>().bounds.center + Vector3.up * GetComponent<Collider>().bounds.size.y * 0.5f;
 			// Place the label on top of the collider
 		float cameraDistance = (worldPosition - guiCamera.transform.position).magnitude;
 		
