@@ -40,7 +40,7 @@ public class EndUIScript : MonoBehaviour {
         if (this.isActivated && ActualTime()-this.time>2.0f 
             && Input.anyKey )
         {
-			PhotonNetwork.LeaveRoom();
+			//PhotonNetwork.LeaveRoom();
             Application.LoadLevel("menu");
         }
 	}

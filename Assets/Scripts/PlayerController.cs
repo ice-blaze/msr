@@ -64,8 +64,8 @@ public class PlayerController : MonoBehaviour
    SoundScript soundScript;
    bool endLevel = false;
 
-	private bool isRemotePlayer = true;
-	public bool isRoomLaunch = false;
+	//private bool isRemotePlayer = true;
+	//public bool isRoomLaunch = false;
 
    /*void Update()
    {
@@ -92,7 +92,8 @@ public class PlayerController : MonoBehaviour
       offsetAxleB = AxleBack.localPosition;
       offsetAxleF = AxleFront.localPosition;
 
-		GameObject respawn = (GameObject)GameObject.FindGameObjectsWithTag("Respawn").GetValue(PhotonNetwork.room.playerCount-1);
+		//GameObject respawn = (GameObject)GameObject.FindGameObjectsWithTag("Respawn").GetValue(PhotonNetwork.room.playerCount-1);
+		GameObject respawn = (GameObject)GameObject.FindGameObjectsWithTag("Respawn").GetValue(0);
 
 		transform.position = respawn.transform.position;
 		transform.rotation = respawn.transform.rotation;
@@ -104,10 +105,10 @@ public class PlayerController : MonoBehaviour
    
    void OnTriggerEnter(Collider other)
    {
-      if (isRemotePlayer) 
-      {
-         return;
-      }
+      //if (isRemotePlayer) 
+      //{
+      //   return;
+      //}
       switch (other.gameObject.tag) 
       {
       case "Finish":
@@ -139,25 +140,25 @@ public class PlayerController : MonoBehaviour
    
    void FixedUpdate()
    {
-		if (isRemotePlayer) return;
+		//if (isRemotePlayer) return;
 
-		if(!isRoomLaunch)
-		{
-			if(PhotonNetwork.room.playerCount==PhotonNetwork.room.maxPlayers){
+		//if(!isRoomLaunch)
+		//{
+			//if(PhotonNetwork.room.playerCount==PhotonNetwork.room.maxPlayers){
 
-				PhotonNetwork.room.visible = false;
+				//PhotonNetwork.room.visible = false;
 
                timerScript.LaunchTimer();
                endUIScript.ResetTime();
 				GetComponent<Rigidbody>().velocity = Vector3.zero;
 				GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-               isRoomLaunch = true;
-			}
-			else
-			{
-				return;
-			}
-		}
+               //isRoomLaunch = true;
+			//}
+			//else
+			//{
+			//	return;
+			//}
+		//}
 
       if (endLevel)
       {
@@ -244,14 +245,14 @@ public class PlayerController : MonoBehaviour
    }
    void Update()
    {
-		if (isRemotePlayer) return;
+        //if (isRemotePlayer) return;
 
-		//wait until the game start
-		if(!PhotonNetwork.room.visible)
-		this.ModifyOxygenByDelta (-this.oxygenDecPerSec * Time.deltaTime);
+        //wait until the game start
+        //if(!PhotonNetwork.room.visible)
+        this.ModifyOxygenByDelta(-this.oxygenDecPerSec * Time.deltaTime);
 
-      //Rotate the Wheel mesh according to the Wheelcollider speed      
-      WheelLFTransform.Rotate (0,0,WheelLF.rpm / 60 * -360 * Time.deltaTime);
+        //Rotate the Wheel mesh according to the Wheelcollider speed      
+        WheelLFTransform.Rotate (0,0,WheelLF.rpm / 60 * -360 * Time.deltaTime);
       WheelRFTransform.Rotate (0,0,WheelRF.rpm / 60 * -360 * Time.deltaTime);
       WheelLBTransform.Rotate (0,0,WheelLB.rpm / 60 * -360 * Time.deltaTime);
       WheelRBTransform.Rotate (0,0,WheelRB.rpm / 60 * -360 * Time.deltaTime);
@@ -395,13 +396,13 @@ public class PlayerController : MonoBehaviour
 
 	public void SetIsRemotePlayer(bool val)
 	{
-		isRemotePlayer = val;
+		//isRemotePlayer = val;
 	}
 
 	void OnGUI()
 	{
-		if(!isRoomLaunch && !isRemotePlayer)
-		{
+		//if(!isRoomLaunch && !isRemotePlayer)
+		//{
 			int width = 200;
 			int height = 150;
 			GUILayout.BeginArea(new Rect((Screen.width - width) / 2, (Screen.height - height) / 2, width, height));
@@ -411,7 +412,7 @@ public class PlayerController : MonoBehaviour
 			GUI.color = Color.white;
 			
 			GUILayout.EndArea();
-		}
+		//}
 	}
    
 }
