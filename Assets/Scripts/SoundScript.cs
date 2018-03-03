@@ -20,13 +20,12 @@ public class SoundScript : MonoBehaviour {
 	public AudioClip boost;
 	public AudioClip brake;
 
-
-	PlayerController pc;
+	VehicleManager pc;
 
 	// Use this for initialization
-	void Start () 
+	void Start ()
 	{
-		pc = GetComponent<PlayerController>();
+		pc = GetComponent<VehicleManager>();
 		motorSource = gameObject.AddComponent<AudioSource>();
 		voiceSource = gameObject.AddComponent<AudioSource>();
 		alarmSource = gameObject.AddComponent<AudioSource>();
@@ -62,9 +61,9 @@ public class SoundScript : MonoBehaviour {
 		voiceSource.playOnAwake = false;
 	}
 
-	
+
 	// Update is called once per frame
-	void Update () 
+	void Update ()
 	{
 		if (pc.oxygen <= 0.3f)
 		{
@@ -78,12 +77,12 @@ public class SoundScript : MonoBehaviour {
 		{
 			alarmSource.Stop();
 		}
-		
+
 		if (Input.GetKeyDown("space"))
 		{
 			boostSource.Play();
 		}
-		
+
 		if (Input.GetKeyUp("space"))
 		{
 			boostSource.Stop();
@@ -91,7 +90,7 @@ public class SoundScript : MonoBehaviour {
 	}
 
    public void PlayMotor(float speed)
-   {    
+   {
       motorSource.pitch = Mathf.Min(speed/150.0f,1) * maxMotorPitch;
    }
 

@@ -100,7 +100,7 @@ public class LevelMenuScript : MonoBehaviour
 	public void RefreshText()
    {
 		levelName.text = levels[actualLevel-1].title;
-		image.renderer.material.mainTexture = levels[actualLevel-1].image;
+		image.GetComponent<Renderer>().material.mainTexture = levels[actualLevel-1].image;
 		highscore.text = levels[actualLevel-1].highscore;
 	}
 
@@ -117,7 +117,7 @@ public class LevelMenuScript : MonoBehaviour
 	public static void RenderChild(GameObject parent,bool isEnabled)
     {
 		foreach(Renderer child in parent.GetComponentsInChildren<Renderer>()){
-			child.renderer.enabled=isEnabled;
+			child.GetComponent<Renderer>().enabled=isEnabled;
 		}
 	}
 }

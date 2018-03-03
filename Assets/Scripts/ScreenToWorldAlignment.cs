@@ -22,10 +22,10 @@ public class ScreenToWorldAlignment : MonoBehaviour
         switch(index)
         {
 			case Index.StarMenu:
-				worldPosition.z += 2.5f*collider.bounds.size.y;
+				worldPosition.z += 2.5f*GetComponent<Collider>().bounds.size.y;
 				break;
 			case Index.LevelSelection:
-				worldPosition.z += 3.0f*collider.bounds.size.y;
+				worldPosition.z += 3.0f*GetComponent<Collider>().bounds.size.y;
 				break;
             default: 
                 break;

@@ -7,7 +7,7 @@ public class ArrowManager : MonoBehaviour
 	{
 		public Vector3 position;
 		public Quaternion rotation;
-		
+
 		public PosRot(Vector3 pos, Quaternion rot)
 		{
 			position = pos;
@@ -25,11 +25,11 @@ public class ArrowManager : MonoBehaviour
 	PosRot lastCheckpoint;
    GameObject arrow;
    float baseZscale; // Base local scale.
-	PlayerController playerController;
+	VehicleManager playerController;
 
    void Start()
    {
-		playerController = GetComponentInParent<PlayerController>();
+		playerController = GetComponentInParent<VehicleManager>();
 
       this.arrow = GameObject.Find("Arrow");
       this.baseZscale = arrow.transform.localScale.x;
@@ -46,7 +46,7 @@ public class ArrowManager : MonoBehaviour
 
    void Update()
    {
-      if (checkpoints.Count > 0) 
+      if (checkpoints.Count > 0)
       {
          Vector3 v = checkpoints [0].transform.position;
          v.y = transform.position.y;
@@ -59,8 +59,8 @@ public class ArrowManager : MonoBehaviour
    public void RemoveCheckPoint(Collider other)
    {
       if (checkpoints.Count > 0 && other.transform.Equals (checkpoints [0]))
-      {   
-			lastCheckpoint.setTransform(playerController.transform);
+      {
+        lastCheckpoint.setTransform(playerController.transform);
          checkpoints.RemoveAt (0);
       }
    }

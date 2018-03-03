@@ -35,12 +35,11 @@ public class EndUIScript : MonoBehaviour {
     {
         return Time.time-startTime;
     }
-	
+
 	void Update () {
-        if (this.isActivated && ActualTime()-this.time>2.0f 
+        if (this.isActivated && ActualTime()-this.time>2.0f
             && Input.anyKey )
         {
-			PhotonNetwork.LeaveRoom();
             Application.LoadLevel("menu");
         }
 	}

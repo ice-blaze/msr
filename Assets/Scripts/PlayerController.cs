@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
    public float oxygen = 1f; // Between 0 and 1;
    public float oxygenDecPerSec = 0.01f;
    public float oxygenDecPerSecBoost = 0.02f;
-   
+
    public float oxygenGainedPerCapsule = 0.3f;
    public bool isBoosted = false;
    public float horsePowerBoostMultiply = 4f;
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
    public float FrontAngle;
    float dv = 1f;
    float dh = 1f;
-   
+
    public ParticleRenderer prLF;
    public ParticleRenderer prLB;
    public ParticleRenderer prRF;
@@ -53,24 +53,21 @@ public class PlayerController : MonoBehaviour
 
    public ParticleEmitter peLF;
    public ParticleEmitter peRF;
-   
+
    public float particleSize;
-   
+
    public Material skidMaterial;
-   
+
    ArrowManager arrowManager;
    EndUIScript endUIScript;
    TimerManager timerScript;
    SoundScript soundScript;
    bool endLevel = false;
 
-	private bool isRemotePlayer = true;
-	public bool isRoomLaunch = false;
-
    /*void Update()
    {
    }*/
-   
+
    void Start()
    {
 //		Destroy (GameObject.Find ( "Main Camera Menu"));
@@ -81,10 +78,10 @@ public class PlayerController : MonoBehaviour
 	  soundScript = GetComponent<SoundScript>();
 
       HorsePowerApplied = horsePower;
-      rigidbody.centerOfMass = Vector3.down * 1.5f;
+      GetComponent<Rigidbody>().centerOfMass = Vector3.down * 1.5f;
       currentSpeed = 0.0f;
-      
-      //Compute the vertical and horizontal distance between the wheels in order to make some trigonometry for 
+
+      //Compute the vertical and horizontal distance between the wheels in order to make some trigonometry for
       //wheels steer angles
       dv = Mathf.Abs(WheelLF.transform.position.x - WheelRB.transform.position.x);
       dh = Mathf.Abs (WheelLF.transform.position.z - WheelRB.transform.position.z);
@@ -92,72 +89,53 @@ public class PlayerController : MonoBehaviour
       offsetAxleB = AxleBack.localPosition;
       offsetAxleF = AxleFront.localPosition;
 
-		GameObject respawn = (GameObject)GameObject.FindGameObjectsWithTag("Respawn").GetValue(PhotonNetwork.room.playerCount-1);
+      GameObject respawn = (GameObject)GameObject.FindGameObjectsWithTag("Respawn").GetValue(0);
 
-		transform.position = respawn.transform.position;
-		transform.rotation = respawn.transform.rotation;
-		rigidbody.angularVelocity = Vector3.zero;
-		
+      transform.position = respawn.transform.position;
+      transform.rotation = respawn.transform.rotation;
+      GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
-      
+      timerScript.LaunchTimer();
+      endUIScript.ResetTime();
+
+
+
    }
-   
+
    void OnTriggerEnter(Collider other)
    {
-      if (isRemotePlayer) 
-      {
-         return;
-      }
-      switch (other.gameObject.tag) 
+      switch (other.gameObject.tag)
       {
       case "Finish":
          if (endUIScript.Activate())
             this.endLevel = true;
          break;
-         
+
       case "capsule":
          this.ModifyOxygenByDelta(oxygenGainedPerCapsule);
          other.gameObject.SetActive (false);
 		 this.soundScript.PlayBonus();
          break;
-         
+
       case "checkpoint":
          this.arrowManager.RemoveCheckPoint(other);
          break;
       }
-      
    }
-   
+
    void ModifyOxygenByDelta(float d)
    {
-      this.oxygen += d;         
+      this.oxygen += d;
       if (this.oxygen > 1f)
          this.oxygen = 1f;
       else if (this.oxygen < 0f)
          this.oxygen = 0f;
    }
-   
+
    void FixedUpdate()
    {
-		if (isRemotePlayer) return;
-
-		if(!isRoomLaunch)
-		{
-			if(PhotonNetwork.room.playerCount==PhotonNetwork.room.maxPlayers){
-
-				PhotonNetwork.room.visible = false;
-
-               timerScript.LaunchTimer();
-               endUIScript.ResetTime();
-				rigidbody.velocity = Vector3.zero;
-				rigidbody.angularVelocity = Vector3.zero;
-               isRoomLaunch = true;
-			}
-			else
-			{
-				return;
-			}
-		}
+      GetComponent<Rigidbody>().velocity = Vector3.zero;
+      GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
       if (endLevel)
       {
@@ -170,41 +148,43 @@ public class PlayerController : MonoBehaviour
       WheelLF.motorTorque = horseToWatt * HorsePowerApplied / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
       WheelRF.motorTorque = horseToWatt * HorsePowerApplied / Mathf.Max(currentSpeed, 10f) * Input.GetAxis ("Vertical");
 
+      Debug.Log(WheelLF.motorTorque);
+
       //Play sound of the motor according to the motor speed
       this.soundScript.PlayMotor(currentSpeed);
 
       //If the user brake
       if (Input.GetAxis ("Vertical") == -1 && currentSpeed > 10 && WheelLF.rpm > 0 ||
-         Input.GetAxis ("Vertical") == 1 && currentSpeed > 10 && WheelLF.rpm < 0) {  
+         Input.GetAxis ("Vertical") == 1 && currentSpeed > 10 && WheelLF.rpm < 0) {
          //And the front wheels touch the ground
          if (Physics.Raycast (WheelLF.transform.position, -WheelLF.transform.up, WheelLF.radius + WheelLF.suspensionDistance) ||
             Physics.Raycast (WheelRF.transform.position, -WheelRF.transform.up, WheelRF.radius + WheelRF.suspensionDistance)) {
             //Produce a brake sound
             isbraking = true;
-            this.soundScript.PlayBrake(currentSpeed); 
+            this.soundScript.PlayBrake(currentSpeed);
          }
          else
          {
             isbraking = false;
          }
-      } 
-      else 
+      }
+      else
       {
          this.soundScript.StopBrake();
          isbraking = false;
       }
-      
-      
-      if (Input.GetButton("Jump")) 
+
+
+      if (Input.GetButton("Jump"))
       {
          this.isBoosted = true;
          this.ModifyOxygenByDelta (-this.oxygenDecPerSecBoost * Time.deltaTime);
          HorsePowerApplied = horsePower * this.horsePowerBoostMultiply;
       }
-      else 
+      else
       {
          this.isBoosted = false;
-         HorsePowerApplied = horsePower;     
+         HorsePowerApplied = horsePower;
       }
 
       //Compute brake torque according to the speed of the vehicle, and friction coefficient
@@ -213,16 +193,16 @@ public class PlayerController : MonoBehaviour
       WheelRF.brakeTorque = brake;
 
       //Calculate steer angle of interior wheels according to the speed and the pression on the keyboard
-      float speedFactor = Mathf.Min(rigidbody.velocity.magnitude / 50);
+      float speedFactor = Mathf.Min(GetComponent<Rigidbody>().velocity.magnitude / 50);
       float currentSteerAngle = Mathf.Lerp(lowSpeedSteerAngle, highSpeedSteerAngle, speedFactor);
       currentSteerAngle *= Input.GetAxis("Horizontal");
 
       //Calculate steer angle of external wheel according to the dimensions and the internal angle
-      if (currentSteerAngle > 0) 
+      if (currentSteerAngle > 0)
       {
          WheelRF.steerAngle = currentSteerAngle;
          WheelLF.steerAngle = getExternalWheelAngle(currentSteerAngle, dv, dh);
-      } 
+      }
       else if(currentSteerAngle < 0)
       {
          WheelLF.steerAngle = currentSteerAngle;
@@ -237,20 +217,17 @@ public class PlayerController : MonoBehaviour
 		   {
 			transform.position = arrowManager.getLastCheckpoint().position;
 			transform.rotation = arrowManager.getLastCheckpoint().rotation;
-			rigidbody.velocity = Vector3.zero;
-			rigidbody.angularVelocity = Vector3.zero;
+			GetComponent<Rigidbody>().velocity = Vector3.zero;
+			GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 		}
 
    }
    void Update()
    {
-		if (isRemotePlayer) return;
+      // woot
+      this.ModifyOxygenByDelta (-this.oxygenDecPerSec * Time.deltaTime);
 
-		//wait until the game start
-		if(!PhotonNetwork.room.visible)
-		this.ModifyOxygenByDelta (-this.oxygenDecPerSec * Time.deltaTime);
-
-      //Rotate the Wheel mesh according to the Wheelcollider speed      
+      //Rotate the Wheel mesh according to the Wheelcollider speed
       WheelLFTransform.Rotate (0,0,WheelLF.rpm / 60 * -360 * Time.deltaTime);
       WheelRFTransform.Rotate (0,0,WheelRF.rpm / 60 * -360 * Time.deltaTime);
       WheelLBTransform.Rotate (0,0,WheelLB.rpm / 60 * -360 * Time.deltaTime);
@@ -259,7 +236,7 @@ public class PlayerController : MonoBehaviour
       //Apply the computed steer angle for front wheels
       float newLFYAngle = WheelLF.steerAngle;
       float newRFYAngle = WheelRF.steerAngle;
-      
+
       WheelLFTransform.localEulerAngles = new Vector3(WheelLFTransform.localEulerAngles.x, newLFYAngle, WheelLFTransform.localEulerAngles.z);
       WheelRFTransform.localEulerAngles = new Vector3(WheelRFTransform.localEulerAngles.x, newRFYAngle, WheelRFTransform.localEulerAngles.z);
 
@@ -269,19 +246,19 @@ public class PlayerController : MonoBehaviour
       AxlePosition ();
 
       //If player ran out of oxygen, the game is over
-		if(this.oxygen<=0f) 
+		if(this.oxygen<=0f)
 		{
 			endLevel=true;
 			endUIScript.Oxygenfail();
 		}
    }
-   
+
    void WheelPosition()
    {
       RaycastHit hit;
       Vector3 wheelPos = new Vector3();
-      
-      //Calculate if the wheels touche the floor. 
+
+      //Calculate if the wheels touche the floor.
       if (Physics.Raycast(WheelLF.transform.position, -WheelLF.transform.up, out hit, WheelLF.radius+WheelLF.suspensionDistance) )
       {
          //The wheel touches the floor, hit correspond to the contact point
@@ -300,17 +277,17 @@ public class PlayerController : MonoBehaviour
          {
             peLF.maxSize = 3;
          }
-         prLF.particleEmitter.emit = true;
+         prLF.GetComponent<ParticleEmitter>().emit = true;
       }
       //If the Wheel does not touch the floor, the wheel is placed at the maximum suspension distance, and does not emit smog
-      else 
+      else
       {
          wheelPos = WheelLF.transform.position -WheelLF.transform.up* WheelLF.suspensionDistance;
          ElevationLF = WheelLF.suspensionDistance+WheelLF.radius;
-         prLF.particleEmitter.emit = false;
+         prLF.GetComponent<ParticleEmitter>().emit = false;
       }
       WheelLFTransform.position = wheelPos;
-      
+
       if (Physics.Raycast(WheelRF.transform.position, -WheelRF.transform.up, out hit, WheelRF.radius+WheelRF.suspensionDistance) )
 	  {
          wheelPos = hit.point+WheelRF.transform.up * WheelRF.radius;
@@ -326,46 +303,46 @@ public class PlayerController : MonoBehaviour
          {
             peRF.maxSize = 3;
          }
-         prRF.particleEmitter.emit = true;
+         prRF.GetComponent<ParticleEmitter>().emit = true;
       }
-      else 
+      else
       {
          wheelPos = WheelRF.transform.position -WheelRF.transform.up* WheelRF.suspensionDistance;
          ElevationRF = WheelRF.suspensionDistance+WheelRF.radius;
-         prRF.particleEmitter.emit = false;
+         prRF.GetComponent<ParticleEmitter>().emit = false;
       }
       WheelRFTransform.position = wheelPos;
-      
+
       if (Physics.Raycast(WheelLB.transform.position, -WheelLB.transform.up, out hit, WheelLB.radius+WheelLB.suspensionDistance) )
 	  {
          wheelPos = hit.point+WheelLB.transform.up * WheelLB.radius;
          ElevationLB = hit.distance;
          prLB.maxParticleSize = currentSpeed/100*particleSize;
-         prLB.particleEmitter.emit = true;
+         prLB.GetComponent<ParticleEmitter>().emit = true;
       }
-      else 
+      else
       {
          wheelPos = WheelLB.transform.position -WheelLB.transform.up* WheelLB.suspensionDistance;
          ElevationLB = WheelLB.suspensionDistance+WheelLB.radius;
-         prLB.particleEmitter.emit = false;
+         prLB.GetComponent<ParticleEmitter>().emit = false;
       }
       WheelLBTransform.position = wheelPos;
-      
+
       if (Physics.Raycast(WheelRB.transform.position, -WheelRB.transform.up, out hit, WheelRB.radius+WheelRB.suspensionDistance) )
 	  {
          wheelPos = hit.point+WheelRB.transform.up * WheelRB.radius;
          ElevationRB = hit.distance;
          prRB.maxParticleSize = currentSpeed/100*particleSize;
-         prRB.particleEmitter.emit = true;
+         prRB.GetComponent<ParticleEmitter>().emit = true;
       }
-      else 
+      else
       {
          wheelPos = WheelRB.transform.position -WheelRB.transform.up* WheelRB.suspensionDistance;
          ElevationRB = WheelRB.suspensionDistance+WheelRB.radius;
-         prRB.particleEmitter.emit = false;
+         prRB.GetComponent<ParticleEmitter>().emit = false;
       }
       WheelRBTransform.position = wheelPos;
-      
+
    }
 
    //Put the axle with the correct angle, following the wheels
@@ -377,7 +354,7 @@ public class PlayerController : MonoBehaviour
       BackAngle = Mathf.Atan (BackAltitudeDifference / BackLatitudeDifference) * Mathf.Rad2Deg;
       AxleBack.localEulerAngles = new Vector3(0,0,BackAngle);
       AxleBack.localPosition = new Vector3 (offsetAxleB.x, offsetAxleB.y - ElevationLB + WheelLB.radius, offsetAxleB.z);
-		
+
 	  //Front Axle - Compute angle and position of back axle to join the two wheels according to the suspensions
       FrontAltitudeDifference = ElevationLF-ElevationRF;
       FrontLatitudeDifference = Mathf.Abs(WheelRFTransform.transform.localPosition.z-WheelLFTransform.transform.localPosition.z);
@@ -392,27 +369,5 @@ public class PlayerController : MonoBehaviour
    {
       return Mathf.Rad2Deg*Mathf.Atan(verticalWheelBase/((verticalWheelBase/Mathf.Tan(Mathf.Deg2Rad*internalAngle))+horizontalWheelBase));
    }
-
-	public void SetIsRemotePlayer(bool val)
-	{
-		isRemotePlayer = val;
-	}
-
-	void OnGUI()
-	{
-		if(!isRoomLaunch && !isRemotePlayer)
-		{
-			int width = 200;
-			int height = 150;
-			GUILayout.BeginArea(new Rect((Screen.width - width) / 2, (Screen.height - height) / 2, width, height));
-
-			GUI.color = new Color(255,132,0);
-			GUILayout.Box("Wait on other players...\nEscap to quite ...");
-			GUI.color = Color.white;
-			
-			GUILayout.EndArea();
-		}
-	}
-   
 }
 

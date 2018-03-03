@@ -51,7 +51,7 @@ public class InputControllerScript : MonoBehaviour
 		if (Input.GetButtonDown("Vertical") && Input.GetAxis("Vertical")<0)
       {
 			this.SelectNextButton();
-		} 
+		}
 		else if (Input.GetButtonDown("Vertical") && Input.GetAxis("Vertical")>0)
 		{
 			this.SelectPrevButton();
@@ -74,7 +74,7 @@ public class InputControllerScript : MonoBehaviour
 			default:
 				break;
 			}
-		} 
+		}
       else if (Input.GetButton("Cancel"))
       {
          this.isAnimated = true;
@@ -87,7 +87,7 @@ public class InputControllerScript : MonoBehaviour
             	this.aboutScript.Quit();
 				break;
 			case Menu.Start:
-            	this.ApplicationQuit();
+            	ApplicationQuit();
 				break;
 			default:
 				break;
@@ -139,16 +139,16 @@ public class InputControllerScript : MonoBehaviour
 	public void StartLevelMenu()
    {
       this.levelAnim.SetTrigger("levelin");
-      this.RenderChild(levelMenu, true);
+      RenderChild(levelMenu, true);
 	}
 
 	public void StartStartMenu()
    {
       this.startAnim.SetTrigger("menuin");
-      this.RenderChild(startMenu, true);
-		
+      RenderChild(startMenu, true);
+
       foreach(GameObject cube in GameObject.FindGameObjectsWithTag("selector"))
-			cube.renderer.enabled = false;
+			cube.GetComponent<Renderer>().enabled = false;
 
 		ButtonScript.selectActual();
 	}
@@ -189,17 +189,17 @@ public class InputControllerScript : MonoBehaviour
 		this.isAnimated = true;
 		startAnim.SetTrigger("aboutout");
 	}
-	
+
 	public void QuittedAboutMenu()
    {
-		this.RenderChild(aboutMenu, false);
+		RenderChild(aboutMenu, false);
 		actualMenu = Menu.Start;
 		this.LaunchNextMenu();
 	}
 
 	public void LaunchNextMenu()
    {
-		switch(actualMenu)      
+		switch(actualMenu)
       {
 		case Menu.Start:
          this.StartStartMenu();
@@ -228,7 +228,7 @@ public class InputControllerScript : MonoBehaviour
    {
 		foreach(Renderer child in parent.GetComponentsInChildren<Renderer>())
       {
-			child.renderer.enabled = isEnabled;
+			child.GetComponent<Renderer>().enabled = isEnabled;
 		}
 	}
 }

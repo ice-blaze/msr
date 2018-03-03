@@ -48,13 +48,13 @@ public class ButtonScript : MonoBehaviour
 	public void Select()
    {
 		isSelected = true;
-		selectors.renderer.enabled = true;
+		selectors.GetComponent<Renderer>().enabled = true;
 	}
 	
 	public void deselect()
    {
 		isSelected = false;
-		selectors.renderer.enabled = false;
+		selectors.GetComponent<Renderer>().enabled = false;
 	}
 	
 	public void execute()

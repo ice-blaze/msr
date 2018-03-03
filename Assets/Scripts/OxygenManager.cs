@@ -4,15 +4,17 @@ using UnityEngine.UI;
 
 public class OxygenManager : MonoBehaviour {
 
-	PlayerController pc;
+	VehicleManager vehicleManager;
+	Slider slider;
 
-	// Update is called once per frame
-	void Update () {
-		Slider slider = gameObject.GetComponentInChildren<Slider>();
-		slider.value = pc.oxygen;
+	void Start() {
+		slider = gameObject.GetComponentInChildren<Slider>();
+		vehicleManager = gameObject.GetComponentInParent<VehicleManager>();
 	}
 
-	public void setPlayercontrol(PlayerController g){
-		pc=g;
+	void Update () {
+		if(vehicleManager) {
+			slider.value = vehicleManager.oxygen;
+		}
 	}
 }
